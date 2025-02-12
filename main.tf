@@ -27,3 +27,18 @@ resource "azurerm_role_assignment" "this" {
   role_definition_name                   = strcontains(lower(each.value.role_definition_id_or_name), lower(local.role_definition_resource_substring)) ? null : each.value.role_definition_id_or_name
   skip_service_principal_aad_check       = each.value.skip_service_principal_aad_check
 }
+
+resource "azurerm_resource_group" "example" {
+  name     = "mhassanin-rg"
+  location = "East US2"
+}
+
+resource "azurerm_api_management" "example" {
+  name                = "example-apim"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+  publisher_name      = "Mohamed Company"
+  publisher_email     = "mhassanin@microsoft.com"
+
+  sku_name = "Developer_1"
+}
