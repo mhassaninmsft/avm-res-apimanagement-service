@@ -12,7 +12,7 @@ resource "azurerm_private_endpoint" "this_managed_dns_zone_groups" {
   private_service_connection {
     is_manual_connection           = false
     name                           = each.value.private_service_connection_name != null ? each.value.private_service_connection_name : "pse-${var.name}"
-    private_connection_resource_id = azurerm_resource_group.TODO.id # TODO: Replace this dummy resource azurerm_resource_group.TODO with your module resource
+    private_connection_resource_id = azurerm_resource_group.this.id # TODO: Replace this dummy resource azurerm_resource_group.TODO with your module resource
     subresource_names              = ["TODO subresource name, see https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-overview#private-link-resource"]
   }
   dynamic "ip_configuration" {
@@ -51,7 +51,7 @@ resource "azurerm_private_endpoint" "this_unmanaged_dns_zone_groups" {
   private_service_connection {
     is_manual_connection           = false
     name                           = each.value.private_service_connection_name != null ? each.value.private_service_connection_name : "pse-${var.name}"
-    private_connection_resource_id = azurerm_resource_group.TODO.id # TODO: Replace this dummy resource azurerm_resource_group.TODO with your module resource
+    private_connection_resource_id = azurerm_resource_group.this.id # TODO: Replace this dummy resource azurerm_resource_group.TODO with your module resource
     subresource_names              = ["TODO subresource name, see https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-overview#private-link-resource"]
   }
   dynamic "ip_configuration" {

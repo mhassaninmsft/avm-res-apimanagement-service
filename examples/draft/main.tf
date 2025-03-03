@@ -7,7 +7,7 @@ terraform {
     }
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 4.0"
+      version = "4.21.9"
     }
     modtm = {
       source  = "Azure/modtm"
@@ -20,9 +20,20 @@ terraform {
   }
 }
 
-
 provider "azurerm" {
-  features {}
+  
+  features {
+    key_vault {
+      purge_soft_delete_on_destroy = false
+    }
+    resource_group {
+      prevent_deletion_if_contains_resources = false
+    }
+#     api_management {
+# purge_soft_delete_on_destroy = false
+#     min_api_version = "2024-10-01-preview"
+#     }
+  }
 }
 
 
@@ -60,9 +71,25 @@ module "test" {
   source = "../../"
   # source             = "Azure/avm-<res/ptn>-<name>/azurerm"
   # ...
-  location            = azurerm_resource_group.this.location
-  name                = "TODO" # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
+  location = "eastus2" # TODO: Remove this line
+  # location            = azurerm_resource_group.this.location
+  name                = module.naming.api_management.name_unique # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
+  # name                = "TODO" # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
   resource_group_name = azurerm_resource_group.this.name
-
+  publisher_email = "mhassanin@microsoft.com"
+  publisher_name = "Mohamed Company"
+  sku_name = "Developer_1"
+  tags = {
+    environment = "test"
+    cost_center = "test"
+  }
   enable_telemetry = var.enable_telemetry # see variables.tf
 }
+
+
+# name                = "mhasaaninapim4555"
+# resource_group_name = "mhassanin-rg"
+# location            = "eastus2"
+# publisher_name      = "Mohamed Company"
+# publisher_email     = "mhassanin@microsoft.com"
+# sku_name            = "Developer_1"
