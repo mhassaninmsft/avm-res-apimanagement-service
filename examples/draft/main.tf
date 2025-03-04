@@ -7,7 +7,7 @@ terraform {
     }
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "4.21.9"
+      version = "4.21.10"
     }
     modtm = {
       source  = "Azure/modtm"
@@ -99,4 +99,3 @@ module "test" {
 # sku_name            = "Developer_1"
 
 # export ARM_SUBSCRIPTION_ID="aa27a1b3-530a-4637-a1e6-6855033a65e5"
-# 
