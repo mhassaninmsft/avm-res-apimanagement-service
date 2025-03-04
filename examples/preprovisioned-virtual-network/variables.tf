@@ -8,27 +8,6 @@ If it is set to false, then no telemetry will be collected.
 DESCRIPTION
 }
 
-variable "location" {
-  type        = string
-  description = <<DESCRIPTION
-  The Azure region to deploy APIM into.
-  DESCRIPTION
-}
-
-variable "resource_group_name" {
-  type        = string
-  description = <<DESCRIPTION
-  The resource group to deploy APIM into.
-  DESCRIPTION
-}
-
-variable "name" {
-  type        = string
-  description = <<DESCRIPTION
-  The name of the APIM resource.
-  DESCRIPTION
-}
-
 variable "publisher_name" {
   type        = string
   description = <<DESCRIPTION
@@ -52,6 +31,14 @@ variable "sku" {
   This variable is the SKU used for the APIM deployment. The default is Developer_1.
   The sku_name is a combination of type (Consumer, Developer, etc) and capacity (number
   of deployed units).
+  DESCRIPTION
+}
+
+variable "tags" {
+  type        = map(string)
+  default     = {}
+  description = <<DESCRIPTION
+  A map of tags to assign to the resource.
   DESCRIPTION
 }
 
@@ -82,12 +69,4 @@ must have port 3443 open, as well as other port configuration defined here:
 https://learn.microsoft.com/en-us/azure/api-management/virtual-network-reference?tabs=stv2.
 Ensure 'Delegate subnet to a service' is set to None for the provided subnet.
 DESCRIPTION
-}
-
-variable "tags" {
-  type        = map(string)
-  default     = {}
-  description = <<DESCRIPTION
-  A map of tags to assign to the resource.
-  DESCRIPTION
 }
