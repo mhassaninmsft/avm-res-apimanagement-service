@@ -60,6 +60,18 @@ resource "azurerm_api_management" "this" {
       identity_ids              = identity.value.user_assigned_resource_ids
     }
   }
+  lifecycle {
+    # This prevents errors when deleting products with subscriptions
+    create_before_destroy = true
+    
+    # Optional: If you want to skip destroying default products
+    ignore_changes = [
+      # product
+    ]
+    # skip_delete_default_products = true
+  }
+  
+  
 }
 
 # Lock resource

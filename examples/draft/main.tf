@@ -78,7 +78,8 @@ module "test" {
   resource_group_name = azurerm_resource_group.this.name
   publisher_email = "mhassanin@microsoft.com"
   publisher_name = "Mohamed Company"
-  sku_name = "Developer_1"
+  sku_name = "Premium_1"
+  # sku_name = "Developer_1"
   tags = {
     environment = "test"
     cost_center = "test"

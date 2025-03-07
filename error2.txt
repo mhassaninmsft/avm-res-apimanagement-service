@@ -56,3 +56,9 @@ Service Name: "apimdhd3"): unexpected status 400 (400 Bad Request) with error: M
 2025-03-03T16:04:16.574-0500 [DEBUG] provider.stdio: received EOF, stopping recv loop: err="rpc error: code = Unavailable desc = error reading from server: EOF"
 2025-03-03T16:04:16.581-0500 [INFO]  provider: plugin process exited: plugin=.terraform/providers/registry.terraform.io/hashicorp/azurerm/4.21.10/linux_amd64/terraform-provider-azurerm id=257588
 2025-03-03T16:04:16.581-0500 [DEBUG] provider: plugin exited
+
+
+
+
+
+Error: deleting Product (Subscription: "aa27a1b3-530a-4637-a1e6-6855033a65e5" │ Resource Group Name: "apimqb2e" │ Service Name: "apimqb2e" │ Product: "starter"): unexpected status 412 (412 Precondition Failed) with error: PreconditionFailed: Exception of type 'Microsoft.WindowsAzure.ApiManagement.Management.Core.Exceptions.PreconditionFailedException' was thrown. │ │ with module.test.azurerm_api_management.this, │ on ../../main.tf line 32, in resource "azurerm_api_management" "this": │ 32: resource "azurerm_api_management" "this" { │

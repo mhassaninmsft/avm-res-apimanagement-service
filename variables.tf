@@ -40,6 +40,11 @@ variable "sku_name" {
   type        = string
   description = "The SKU name of the API Management service."
   default     = "Developer_1"
+  
+  validation {
+    condition     = can(regex("^(Consumption|Developer|Basic|Standard|Premium)_([1-9]|[1-9][0-9])$", var.sku_name))
+    error_message = "The sku_name must be a string consisting of two parts separated by an underscore(_). The first part must be one of: Consumption, Developer, Basic, Standard, or Premium. The second part must be a positive integer between 1-99 (e.g. Developer_1)."
+  }
 }
 
 
