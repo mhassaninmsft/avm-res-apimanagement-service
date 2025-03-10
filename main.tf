@@ -37,7 +37,20 @@ resource "azurerm_api_management" "this" {
   publisher_email     = var.publisher_email
   sku_name           = var.sku_name
   tags               = var.tags
-  min_api_version = "2024-06-01-preview"
+  # virtual_network_configuration {
+  #   subnet_id = var.virtual_network_subnet_id
+  # }
+
+  # This implementation uses a dynamic block with for_each to conditionally create the virtual_network_configuration block only when virtual_network_type is either "Internal" or "External".
+  # If the type is "None", the block won't be included in the resource.
+  dynamic "virtual_network_configuration" {
+    for_each = contains(["Internal", "External"], var.virtual_network_type) ? [1] : []
+    content {
+      subnet_id = var.virtual_network_subnet_id
+    }
+  }
+  virtual_network_type = var.virtual_network_type
+  # min_api_version = "2024-06-01-preview"
 
   dynamic "identity" {
     for_each = local.managed_identities.system_assigned_user_assigned

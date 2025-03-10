@@ -84,6 +84,10 @@ module "test" {
     cost_center = "test"
   }
   enable_telemetry = var.enable_telemetry # see variables.tf
+  # virtual_network_type = "External"
+  # virtual_network_subnet_id = "/subscriptions/aa27a1b3-530a-4637-a1e6-6855033a65e5/resourceGroups/rg-wwgpr/providers/Microsoft.Network/virtualNetworks/vnetwwgpr/subnets/apim-subnet-3"
+  virtual_network_type = "Internal"
+  virtual_network_subnet_id = "/subscriptions/aa27a1b3-530a-4637-a1e6-6855033a65e5/resourceGroups/rg-wwgpr/providers/Microsoft.Network/virtualNetworks/vnetwwgpr/subnets/apim-subnet-4"
 }
 
 
@@ -93,3 +97,6 @@ module "test" {
 # publisher_name      = "Mohamed Company"
 # publisher_email     = "mhassanin@microsoft.com"
 # sku_name            = "Developer_1"
+
+# export ARM_SUBSCRIPTION_ID="aa27a1b3-530a-4637-a1e6-6855033a65e5"
+# 

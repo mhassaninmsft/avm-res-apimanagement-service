@@ -42,6 +42,33 @@ variable "sku_name" {
   default     = "Developer_1"
 }
 
+
+variable "virtual_network_subnet_id" {
+  type        = string
+  description = "The ID of the subnet in the virtual network where the API Management service will be deployed."
+  default     = null
+  
+  validation {
+    condition     = var.virtual_network_type == "None" ? var.virtual_network_subnet_id == null : true
+    error_message = "The virtual_network_subnet_id must not be set when virtual_network_type is None."
+  }
+  # NOTE: Please ensure that in the subnet, inbound port 3443 is open when virtual_network_type is Internal or External.
+  # Additional ports that need to be open:
+  # - For Management Endpoint: 3443 (HTTPS)
+  # - For Gateway/Developer Portal: 80 (HTTP), 443 (HTTPS)
+  # - For Azure Portal Dependencies: 6381-6383 (Redis Cache)
+  # - For Log to Event Hub: 5671, 5672, 5673 (AMQP)
+  # - For Metrics to Log Analytics: 443 (HTTPS)
+}
+variable "virtual_network_type" {
+  type        = string
+  description = "The type of virtual network configuration for the API Management service."
+  default     = "None"
+  validation {
+    condition     = contains(["None", "External", "Internal"], var.virtual_network_type)
+    error_message = "The virtual_network_type must be one of: None, External, or Internal."
+  }
+}
 # required AVM interfaces
 # remove only if not supported by the resource
 # tflint-ignore: terraform_unused_declarations
