@@ -1,0 +1,64 @@
+ Error: listing APIs after creation of Service (Subscription: "aa27a1b3-530a-4637-a1e6-6855033a65e5"
+│ Resource Group Name: "apimdhd3"
+│ Service Name: "apimdhd3"): unexpected status 400 (400 Bad Request) with error: MissingOrIncorrectVersionParameter: API version query parameter is not specified or was specified incorrectly.  Supported versions: 2014-02-14-preview,2014-02-14,2015-09-15,2016-07-07,2016-10-10,2017-03-01,2018-01-01,2018-06-01-preview,2019-01-01,2019-12-01-preview,2019-12-01,2020-06-01-preview,2020-12-01,2021-01-01-preview,2021-04-01-preview,2021-08-01,2021-12-01-preview,2022-04-01-preview,2022-08-01,2022-09-01-preview,2023-03-01-preview,2023-05-01-preview,2023-09-01-preview,2024-06-01-preview  Example query param format: api-version=SupportedVersion
+
+ [DEBUG] AzureRM Request: 
+2025-03-03T16:04:16.076-0500 [DEBUG] provider.terraform-provider-azurerm: GET /subscriptions/aa27a1b3-530a-4637-a1e6-6855033a65e5/resourceGroups/apimdhd3/providers/Microsoft.ApiManagement/service/apimdhd3/apis?api-version=2024-05-01 HTTP/1.1
+2025-03-03T16:04:16.076-0500 [DEBUG] provider.terraform-provider-azurerm: Host: management.azure.com
+2025-03-03T16:04:16.076-0500 [DEBUG] provider.terraform-provider-azurerm: User-Agent: HashiCorp/go-azure-sdk (Go-http-Client/1.1 api/2024-05-01) HashiCorp Terraform/1.11.0 (+https://www.terraform.io) terraform-provider-azurerm/dev pid-222c6c49-1b0a-5959-a213-6608f9eb8820
+2025-03-03T16:04:16.076-0500 [DEBUG] provider.terraform-provider-azurerm: Accept: application/json; charset=utf-8; IEEE754Compatible=false
+2025-03-03T16:04:16.076-0500 [DEBUG] provider.terraform-provider-azurerm: Content-Type: application/json; charset=utf-8
+2025-03-03T16:04:16.076-0500 [DEBUG] provider.terraform-provider-azurerm: Odata-Maxversion: 4.0
+2025-03-03T16:04:16.076-0500 [DEBUG] provider.terraform-provider-azurerm: Odata-Version: 4.0
+2025-03-03T16:04:16.076-0500 [DEBUG] provider.terraform-provider-azurerm: X-Ms-Correlation-Request-Id: 5d03798c-7fcf-e4fc-4419-96ed7810e73d
+2025-03-03T16:04:16.076-0500 [DEBUG] provider.terraform-provider-azurerm: Accept-Encoding: gzip
+2025-03-03T16:04:16.076-0500 [DEBUG] provider.terraform-provider-azurerm
+2025-03-03T16:04:16.076-0500 [DEBUG] provider.terraform-provider-azurerm
+2025-03-03T16:04:16.076-0500 [DEBUG] provider.terraform-provider-azurerm: [DEBUG] GET https://management.azure.com/subscriptions/aa27a1b3-530a-4637-a1e6-6855033a65e5/resourceGroups/apimdhd3/providers/Microsoft.ApiManagement/service/apimdhd3/apis?api-version=2024-05-01
+2025-03-03T16:04:16.519-0500 [DEBUG] provider.terraform-provider-azurerm: [DEBUG] AzureRM Response for https://management.azure.com/subscriptions/aa27a1b3-530a-4637-a1e6-6855033a65e5/resourceGroups/apimdhd3/providers/Microsoft.ApiManagement/service/apimdhd3/apis?api-version=2024-05-01: 
+2025-03-03T16:04:16.519-0500 [DEBUG] provider.terraform-provider-azurerm: HTTP/2.0 400 Bad Request
+2025-03-03T16:04:16.519-0500 [DEBUG] provider.terraform-provider-azurerm: Content-Length: 604
+2025-03-03T16:04:16.519-0500 [DEBUG] provider.terraform-provider-azurerm: Cache-Control: no-cache
+2025-03-03T16:04:16.519-0500 [DEBUG] provider.terraform-provider-azurerm: Content-Type: application/json; charset=utf-8
+2025-03-03T16:04:16.519-0500 [DEBUG] provider.terraform-provider-azurerm: Date: Mon, 03 Mar 2025 21:04:13 GMT
+2025-03-03T16:04:16.519-0500 [DEBUG] provider.terraform-provider-azurerm: Expires: -1
+2025-03-03T16:04:16.519-0500 [DEBUG] provider.terraform-provider-azurerm: Pragma: no-cache
+2025-03-03T16:04:16.519-0500 [DEBUG] provider.terraform-provider-azurerm: Strict-Transport-Security: max-age=31536000; includeSubDomains
+2025-03-03T16:04:16.519-0500 [DEBUG] provider.terraform-provider-azurerm: X-Cache: CONFIG_NOCACHE
+2025-03-03T16:04:16.519-0500 [DEBUG] provider.terraform-provider-azurerm: X-Content-Type-Options: nosniff
+2025-03-03T16:04:16.519-0500 [DEBUG] provider.terraform-provider-azurerm: X-Ms-Correlation-Request-Id: 5d03798c-7fcf-e4fc-4419-96ed7810e73d
+2025-03-03T16:04:16.519-0500 [DEBUG] provider.terraform-provider-azurerm: X-Ms-Ratelimit-Remaining-Subscription-Global-Reads: 3749
+2025-03-03T16:04:16.519-0500 [DEBUG] provider.terraform-provider-azurerm: X-Ms-Ratelimit-Remaining-Subscription-Reads: 249
+2025-03-03T16:04:16.519-0500 [DEBUG] provider.terraform-provider-azurerm: X-Ms-Request-Id: 5d03798c-7fcf-e4fc-4419-96ed7810e73d
+2025-03-03T16:04:16.519-0500 [DEBUG] provider.terraform-provider-azurerm: X-Ms-Routing-Request-Id: EASTUS:20250303T210414Z:ed17a4a7-4e27-4aa6-8b98-ac84f3b35abc
+2025-03-03T16:04:16.519-0500 [DEBUG] provider.terraform-provider-azurerm: X-Msedge-Ref: Ref A: 7461F13F1E114829B2214CD91B32B602 Ref B: MNZ221060608039 Ref C: 2025-03-03T21:04:14Z
+2025-03-03T16:04:16.520-0500 [DEBUG] provider.terraform-provider-azurerm
+2025-03-03T16:04:16.520-0500 [DEBUG] provider.terraform-provider-azurerm: {"error":{"code":"MissingOrIncorrectVersionParameter","message":"API version query parameter is not specified or was specified incorrectly.  Supported versions: 2014-02-14-preview,2014-02-14,2015-09-15,2016-07-07,2016-10-10,2017-03-01,2018-01-01,2018-06-01-preview,2019-01-01,2019-12-01-preview,2019-12-01,2020-06-01-preview,2020-12-01,2021-01-01-preview,2021-04-01-preview,2021-08-01,2021-12-01-preview,2022-04-01-preview,2022-08-01,2022-09-01-preview,2023-03-01-preview,2023-05-01-preview,2023-09-01-preview,2024-06-01-preview  Example query param format: api-version=SupportedVersion","details":null}}
+2025-03-03T16:04:16.520-0500 [ERROR] provider.terraform-provider-azurerm: Response contains error diagnostic: @module=sdk.proto tf_req_id=741b636a-1dc7-3208-b5d5-5ffa5eec61b5 tf_resource_type=azurerm_api_management tf_rpc=ApplyResourceChange diagnostic_detail="" diagnostic_severity=ERROR
+  diagnostic_summary=
+  | listing APIs after creation of Service (Subscription: "aa27a1b3-530a-4637-a1e6-6855033a65e5"
+  | Resource Group Name: "apimdhd3"
+  | Service Name: "apimdhd3"): unexpected status 400 (400 Bad Request) with error: MissingOrIncorrectVersionParameter: API version query parameter is not specified or was specified incorrectly.  Supported versions: 2014-02-14-preview,2014-02-14,2015-09-15,2016-07-07,2016-10-10,2017-03-01,2018-01-01,2018-06-01-preview,2019-01-01,2019-12-01-preview,2019-12-01,2020-06-01-preview,2020-12-01,2021-01-01-preview,2021-04-01-preview,2021-08-01,2021-12-01-preview,2022-04-01-preview,2022-08-01,2022-09-01-preview,2023-03-01-preview,2023-05-01-preview,2023-09-01-preview,2024-06-01-preview  Example query param format: api-version=SupportedVersion
+   tf_proto_version=5.8 tf_provider_addr=registry.terraform.io/hashicorp/azurerm @caller=/home/mhassani/projects/terraform-provider-azurerm/vendor/github.com/hashicorp/terraform-plugin-go/tfprotov5/internal/diag/diagnostics.go:58 timestamp=2025-03-03T16:04:16.520-0500
+2025-03-03T16:04:16.566-0500 [ERROR] vertex "module.test.azurerm_api_management.this" error: listing APIs after creation of Service (Subscription: "aa27a1b3-530a-4637-a1e6-6855033a65e5"
+Resource Group Name: "apimdhd3"
+Service Name: "apimdhd3"): unexpected status 400 (400 Bad Request) with error: MissingOrIncorrectVersionParameter: API version query parameter is not specified or was specified incorrectly.  Supported versions: 2014-02-14-preview,2014-02-14,2015-09-15,2016-07-07,2016-10-10,2017-03-01,2018-01-01,2018-06-01-preview,2019-01-01,2019-12-01-preview,2019-12-01,2020-06-01-preview,2020-12-01,2021-01-01-preview,2021-04-01-preview,2021-08-01,2021-12-01-preview,2022-04-01-preview,2022-08-01,2022-09-01-preview,2023-03-01-preview,2023-05-01-preview,2023-09-01-preview,2024-06-01-preview  Example query param format: api-version=SupportedVersion
+╷
+│ Error: listing APIs after creation of Service (Subscription: "aa27a1b3-530a-4637-a1e6-6855033a65e5"
+│ Resource Group Name: "apimdhd3"
+│ Service Name: "apimdhd3"): unexpected status 400 (400 Bad Request) with error: MissingOrIncorrectVersionParameter: API version query parameter is not specified or was specified incorrectly.  Supported versions: 2014-02-14-preview,2014-02-14,2015-09-15,2016-07-07,2016-10-10,2017-03-01,2018-01-01,2018-06-01-preview,2019-01-01,2019-12-01-preview,2019-12-01,2020-06-01-preview,2020-12-01,2021-01-01-preview,2021-04-01-preview,2021-08-01,2021-12-01-preview,2022-04-01-preview,2022-08-01,2022-09-01-preview,2023-03-01-preview,2023-05-01-preview,2023-09-01-preview,2024-06-01-preview  Example query param format: api-version=SupportedVersion
+│ 
+│   with module.test.azurerm_api_management.this,
+│   on ../../main.tf line 32, in resource "azurerm_api_management" "this":
+│   32: resource "azurerm_api_management" "this" {
+│ 
+╵
+2025-03-03T16:04:16.574-0500 [DEBUG] provider.stdio: received EOF, stopping recv loop: err="rpc error: code = Unavailable desc = error reading from server: EOF"
+2025-03-03T16:04:16.581-0500 [INFO]  provider: plugin process exited: plugin=.terraform/providers/registry.terraform.io/hashicorp/azurerm/4.21.10/linux_amd64/terraform-provider-azurerm id=257588
+2025-03-03T16:04:16.581-0500 [DEBUG] provider: plugin exited
+
+
+
+
+
+Error: deleting Product (Subscription: "aa27a1b3-530a-4637-a1e6-6855033a65e5" │ Resource Group Name: "apimqb2e" │ Service Name: "apimqb2e" │ Product: "starter"): unexpected status 412 (412 Precondition Failed) with error: PreconditionFailed: Exception of type 'Microsoft.WindowsAzure.ApiManagement.Management.Core.Exceptions.PreconditionFailedException' was thrown. │ │ with module.test.azurerm_api_management.this, │ on ../../main.tf line 32, in resource "azurerm_api_management" "this": │ 32: resource "azurerm_api_management" "this" { │

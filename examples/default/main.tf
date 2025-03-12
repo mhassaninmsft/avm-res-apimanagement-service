@@ -1,20 +1,25 @@
 terraform {
-  required_version = "~> 1.5"
+  required_version = ">= 1.9, < 2.0"
   required_providers {
+    azapi = {
+      source  = "Azure/azapi"
+      version = "~> 2.0"
+    }
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 3.74"
+      version = "~> 4.0"
     }
     modtm = {
-      source  = "azure/modtm"
-      version = "~> 0.3"
+      source  = "Azure/modtm"
+      version = "0.3.2"
     }
     random = {
       source  = "hashicorp/random"
-      version = "~> 3.5"
+      version = "3.6.2"
     }
   }
 }
+
 
 provider "azurerm" {
   features {}

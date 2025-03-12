@@ -8,12 +8,12 @@ variable "name" {
   type        = string
   description = "The name of the this resource."
 
-  validation {
-    condition     = can(regex("TODO", var.name))
-    error_message = "The name must be TODO." # TODO remove the example below once complete:
-    #condition     = can(regex("^[a-z0-9]{5,50}$", var.name))
-    #error_message = "The name must be between 5 and 50 characters long and can only contain lowercase letters and numbers."
-  }
+  # validation {
+  #   condition     = can(regex("TODO", var.name))
+  #   error_message = "The name must be TODO." # TODO remove the example below once complete:
+  #   #condition     = can(regex("^[a-z0-9]{5,50}$", var.name))
+  #   #error_message = "The name must be between 5 and 50 characters long and can only contain lowercase letters and numbers."
+  # }
 }
 
 # This is required for most resource modules
@@ -22,6 +22,58 @@ variable "resource_group_name" {
   description = "The resource group where the resources will be deployed."
 }
 
+
+# New variables for APIM
+variable "publisher_name" {
+  type        = string
+  description = "The name of the API Management service publisher."
+  default     = "Mohamed Company"
+}
+
+variable "publisher_email" {
+  type        = string
+  description = "The email of the API Management service publisher."
+  default     = "mhassanin@microsoft.com"
+}
+
+variable "sku_name" {
+  type        = string
+  description = "The SKU name of the API Management service."
+  default     = "Developer_1"
+  
+  validation {
+    condition     = can(regex("^(Consumption|Developer|Basic|Standard|Premium)_([1-9]|[1-9][0-9])$", var.sku_name))
+    error_message = "The sku_name must be a string consisting of two parts separated by an underscore(_). The first part must be one of: Consumption, Developer, Basic, Standard, or Premium. The second part must be a positive integer between 1-99 (e.g. Developer_1)."
+  }
+}
+
+
+variable "virtual_network_subnet_id" {
+  type        = string
+  description = "The ID of the subnet in the virtual network where the API Management service will be deployed."
+  default     = null
+  
+  validation {
+    condition     = var.virtual_network_type == "None" ? var.virtual_network_subnet_id == null : true
+    error_message = "The virtual_network_subnet_id must not be set when virtual_network_type is None."
+  }
+  # NOTE: Please ensure that in the subnet, inbound port 3443 is open when virtual_network_type is Internal or External.
+  # Additional ports that need to be open:
+  # - For Management Endpoint: 3443 (HTTPS)
+  # - For Gateway/Developer Portal: 80 (HTTP), 443 (HTTPS)
+  # - For Azure Portal Dependencies: 6381-6383 (Redis Cache)
+  # - For Log to Event Hub: 5671, 5672, 5673 (AMQP)
+  # - For Metrics to Log Analytics: 443 (HTTPS)
+}
+variable "virtual_network_type" {
+  type        = string
+  description = "The type of virtual network configuration for the API Management service."
+  default     = "None"
+  validation {
+    condition     = contains(["None", "External", "Internal"], var.virtual_network_type)
+    error_message = "The virtual_network_type must be one of: None, External, or Internal."
+  }
+}
 # required AVM interfaces
 # remove only if not supported by the resource
 # tflint-ignore: terraform_unused_declarations
@@ -187,6 +239,10 @@ A map of private endpoints to create on this resource. The map key is deliberate
   - `private_ip_address` - The private IP address of the IP configuration.
 DESCRIPTION
   nullable    = false
+  validation {
+    condition     = var.virtual_network_type != "Internal" || length(var.private_endpoints) == 0
+    error_message = "Private endpoints cannot be used with API Management in Internal virtual network mode. Use either private endpoints (with virtual_network_type = None or External) or Internal virtual network mode."
+  }
 }
 
 # This variable is used to determine if the private_dns_zone_group block should be included,
