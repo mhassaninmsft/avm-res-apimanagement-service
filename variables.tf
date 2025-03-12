@@ -239,6 +239,10 @@ A map of private endpoints to create on this resource. The map key is deliberate
   - `private_ip_address` - The private IP address of the IP configuration.
 DESCRIPTION
   nullable    = false
+  validation {
+    condition     = var.virtual_network_type != "Internal" || length(var.private_endpoints) == 0
+    error_message = "Private endpoints cannot be used with API Management in Internal virtual network mode. Use either private endpoints (with virtual_network_type = None or External) or Internal virtual network mode."
+  }
 }
 
 # This variable is used to determine if the private_dns_zone_group block should be included,

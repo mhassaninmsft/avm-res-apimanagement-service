@@ -1,7 +1,8 @@
 resource "azurerm_network_security_group" "apim_nsg" {
   name                = "apim-nsg"
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
+  location            = azurerm_resource_group.this.location
+  resource_group_name = azurerm_resource_group.this.name
+  
 }
 
 # Inbound Rules
@@ -15,7 +16,7 @@ resource "azurerm_network_security_rule" "inbound_internet_http_https" {
   destination_port_ranges     = ["80", "443"]
   source_address_prefix       = "Internet"
   destination_address_prefix  = "VirtualNetwork"
-  resource_group_name         = azurerm_resource_group.example.name
+  resource_group_name         = azurerm_resource_group.this.name
   network_security_group_name = azurerm_network_security_group.apim_nsg.name
 }
 
@@ -29,7 +30,7 @@ resource "azurerm_network_security_rule" "inbound_apimgmt_management" {
   destination_port_range      = "3443"
   source_address_prefix       = "ApiManagement"
   destination_address_prefix  = "VirtualNetwork"
-  resource_group_name         = azurerm_resource_group.example.name
+  resource_group_name         = azurerm_resource_group.this.name
   network_security_group_name = azurerm_network_security_group.apim_nsg.name
 }
 
@@ -43,7 +44,7 @@ resource "azurerm_network_security_rule" "inbound_azure_lb" {
   destination_port_range      = "6390"
   source_address_prefix       = "AzureLoadBalancer"
   destination_address_prefix  = "VirtualNetwork"
-  resource_group_name         = azurerm_resource_group.example.name
+  resource_group_name         = azurerm_resource_group.this.name
   network_security_group_name = azurerm_network_security_group.apim_nsg.name
 }
 
@@ -57,7 +58,7 @@ resource "azurerm_network_security_rule" "inbound_azure_tm" {
   destination_port_range      = "443"
   source_address_prefix       = "AzureTrafficManager"
   destination_address_prefix  = "VirtualNetwork"
-  resource_group_name         = azurerm_resource_group.example.name
+  resource_group_name         = azurerm_resource_group.this.name
   network_security_group_name = azurerm_network_security_group.apim_nsg.name
 }
 
@@ -71,7 +72,7 @@ resource "azurerm_network_security_rule" "inbound_azure_lb_monitoring" {
   destination_port_range      = "6391"
   source_address_prefix       = "AzureLoadBalancer"
   destination_address_prefix  = "VirtualNetwork"
-  resource_group_name         = azurerm_resource_group.example.name
+  resource_group_name         = azurerm_resource_group.this.name
   network_security_group_name = azurerm_network_security_group.apim_nsg.name
 }
 
@@ -86,7 +87,7 @@ resource "azurerm_network_security_rule" "outbound_storage" {
   destination_port_range      = "443"
   source_address_prefix       = "VirtualNetwork"
   destination_address_prefix  = "Storage"
-  resource_group_name         = azurerm_resource_group.example.name
+  resource_group_name         = azurerm_resource_group.this.name
   network_security_group_name = azurerm_network_security_group.apim_nsg.name
 }
 
@@ -100,7 +101,7 @@ resource "azurerm_network_security_rule" "outbound_aad" {
   destination_port_range      = "443"
   source_address_prefix       = "VirtualNetwork"
   destination_address_prefix  = "AzureActiveDirectory"
-  resource_group_name         = azurerm_resource_group.example.name
+  resource_group_name         = azurerm_resource_group.this.name
   network_security_group_name = azurerm_network_security_group.apim_nsg.name
 }
 
@@ -114,7 +115,7 @@ resource "azurerm_network_security_rule" "outbound_azure_connectors" {
   destination_port_range      = "443"
   source_address_prefix       = "VirtualNetwork"
   destination_address_prefix  = "AzureConnectors"
-  resource_group_name         = azurerm_resource_group.example.name
+  resource_group_name         = azurerm_resource_group.this.name
   network_security_group_name = azurerm_network_security_group.apim_nsg.name
 }
 
@@ -128,7 +129,7 @@ resource "azurerm_network_security_rule" "outbound_sql" {
   destination_port_range      = "1433"
   source_address_prefix       = "VirtualNetwork"
   destination_address_prefix  = "Sql"
-  resource_group_name         = azurerm_resource_group.example.name
+  resource_group_name         = azurerm_resource_group.this.name
   network_security_group_name = azurerm_network_security_group.apim_nsg.name
 }
 
@@ -142,7 +143,7 @@ resource "azurerm_network_security_rule" "outbound_key_vault" {
   destination_port_range      = "443"
   source_address_prefix       = "VirtualNetwork"
   destination_address_prefix  = "AzureKeyVault"
-  resource_group_name         = azurerm_resource_group.example.name
+  resource_group_name         = azurerm_resource_group.this.name
   network_security_group_name = azurerm_network_security_group.apim_nsg.name
 }
 
@@ -156,7 +157,7 @@ resource "azurerm_network_security_rule" "outbound_event_hub" {
   destination_port_ranges     = ["5671", "5672", "443"]
   source_address_prefix       = "VirtualNetwork"
   destination_address_prefix  = "EventHub"
-  resource_group_name         = azurerm_resource_group.example.name
+  resource_group_name         = azurerm_resource_group.this.name
   network_security_group_name = azurerm_network_security_group.apim_nsg.name
 }
 
@@ -170,7 +171,7 @@ resource "azurerm_network_security_rule" "outbound_file_storage" {
   destination_port_range      = "445"
   source_address_prefix       = "VirtualNetwork"
   destination_address_prefix  = "Storage"
-  resource_group_name         = azurerm_resource_group.example.name
+  resource_group_name         = azurerm_resource_group.this.name
   network_security_group_name = azurerm_network_security_group.apim_nsg.name
 }
 
@@ -184,7 +185,7 @@ resource "azurerm_network_security_rule" "outbound_azure_monitor" {
   destination_port_ranges     = ["1886", "443"]
   source_address_prefix       = "VirtualNetwork"
   destination_address_prefix  = "AzureMonitor"
-  resource_group_name         = azurerm_resource_group.example.name
+  resource_group_name         = azurerm_resource_group.this.name
   network_security_group_name = azurerm_network_security_group.apim_nsg.name
 }
 
@@ -199,7 +200,7 @@ resource "azurerm_network_security_rule" "inbound_redis_external" {
   destination_port_range      = "6380"
   source_address_prefix       = "VirtualNetwork"
   destination_address_prefix  = "VirtualNetwork"
-  resource_group_name         = azurerm_resource_group.example.name
+  resource_group_name         = azurerm_resource_group.this.name
   network_security_group_name = azurerm_network_security_group.apim_nsg.name
 }
 
@@ -213,7 +214,7 @@ resource "azurerm_network_security_rule" "outbound_redis_external" {
   destination_port_range      = "6380"
   source_address_prefix       = "VirtualNetwork"
   destination_address_prefix  = "VirtualNetwork"
-  resource_group_name         = azurerm_resource_group.example.name
+  resource_group_name         = azurerm_resource_group.this.name
   network_security_group_name = azurerm_network_security_group.apim_nsg.name
 }
 
@@ -227,7 +228,7 @@ resource "azurerm_network_security_rule" "inbound_redis_internal" {
   destination_port_range      = "6381-6383"
   source_address_prefix       = "VirtualNetwork"
   destination_address_prefix  = "VirtualNetwork"
-  resource_group_name         = azurerm_resource_group.example.name
+  resource_group_name         = azurerm_resource_group.this.name
   network_security_group_name = azurerm_network_security_group.apim_nsg.name
 }
 
@@ -241,7 +242,7 @@ resource "azurerm_network_security_rule" "outbound_redis_internal" {
   destination_port_range      = "6381-6383"
   source_address_prefix       = "VirtualNetwork"
   destination_address_prefix  = "VirtualNetwork"
-  resource_group_name         = azurerm_resource_group.example.name
+  resource_group_name         = azurerm_resource_group.this.name
   network_security_group_name = azurerm_network_security_group.apim_nsg.name
 }
 
@@ -255,7 +256,7 @@ resource "azurerm_network_security_rule" "inbound_sync_counters" {
   destination_port_range      = "4290"
   source_address_prefix       = "VirtualNetwork"
   destination_address_prefix  = "VirtualNetwork"
-  resource_group_name         = azurerm_resource_group.example.name
+  resource_group_name         = azurerm_resource_group.this.name
   network_security_group_name = azurerm_network_security_group.apim_nsg.name
 }
 
@@ -269,6 +270,12 @@ resource "azurerm_network_security_rule" "outbound_sync_counters" {
   destination_port_range      = "4290"
   source_address_prefix       = "VirtualNetwork"
   destination_address_prefix  = "VirtualNetwork"
-  resource_group_name         = azurerm_resource_group.example.name
+  resource_group_name         = azurerm_resource_group.this.name
   network_security_group_name = azurerm_network_security_group.apim_nsg.name
+}
+
+# Associate NSG with the APIM subnet
+resource "azurerm_subnet_network_security_group_association" "apim" {
+  subnet_id                 = azurerm_subnet.apim_subnet.id
+  network_security_group_id = azurerm_network_security_group.apim_nsg.id
 }

@@ -129,25 +129,21 @@ module "test" {
   }
   enable_telemetry    = var.enable_telemetry
   
-  # Use the newly created subnet for API Management
-  virtual_network_type     = "External"
-  virtual_network_subnet_id = azurerm_subnet.apim_subnet.id
-  
   # Add private endpoint configuration
-  # private_endpoints = {
-  #   endpoint1 = {
-  #     name               = "pe-${module.naming.api_management.name_unique}"
-  #     subnet_resource_id = azurerm_subnet.private_endpoints.id
+  private_endpoints = {
+    endpoint1 = {
+      name               = "pe-${module.naming.api_management.name_unique}"
+      subnet_resource_id = azurerm_subnet.private_endpoints.id
       
-  #     # Link to the private DNS zone we created
-  #     private_dns_zone_resource_ids = [
-  #       module.private_dns_apim.resource.id
-  #     ]
+      # Link to the private DNS zone we created
+      private_dns_zone_resource_ids = [
+        module.private_dns_apim.resource.id
+      ]
       
-  #     tags = {
-  #       environment = "test"
-  #       service     = "apim"
-  #     }
-  #   }
-  # }
+      tags = {
+        environment = "test"
+        service     = "apim"
+      }
+    }
+  }
 }

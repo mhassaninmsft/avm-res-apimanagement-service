@@ -12,7 +12,7 @@ resource "azurerm_private_endpoint" "this" {
     is_manual_connection           = false
     name                           = each.value.private_service_connection_name != null ? each.value.private_service_connection_name : "psc-${var.name}"
     private_connection_resource_id = azurerm_api_management.this.id
-    subresource_names              = ["Gateway"] # API Management subresource - can be "gateway", "portal", "management", "developer-portal", or "scm"
+    subresource_names              = ["Gateway"] 
   }
 
   dynamic "ip_configuration" {
