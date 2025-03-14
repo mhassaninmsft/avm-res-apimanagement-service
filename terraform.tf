@@ -40,9 +40,9 @@ terraform {
 }
 
 
-# Configure the Microsoft Azure Provider
-provider "azurerm" {
-  features {}
-  # If you're using Azure CLI authentication, you don't need to specify credentials here
-  # For other authentication methods, add the necessary credentials
-}
+# # Configure the Microsoft Azure Provider
+# provider "azurerm" {
+#   features {}
+#   # If you're using Azure CLI authentication, you don't need to specify credentials here
+#   # For other authentication methods, add the necessary credentials
+# }
