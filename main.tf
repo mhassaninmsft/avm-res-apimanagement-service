@@ -1,9 +1,9 @@
-# TODO: Replace this dummy resource azurerm_resource_group.TODO with your module resource
-resource "azurerm_resource_group" "this" {
-  location = var.location
-  name     = var.name # calling code must supply the name
-  tags     = var.tags
-}
+# # TODO: Replace this dummy resource azurerm_resource_group.TODO with your module resource
+# resource "azurerm_resource_group" "this" {
+#   location = var.location
+#   name     = var.name # calling code must supply the name
+#   tags     = var.tags
+# }
 
 # # required AVM resources interfaces
 # resource "azurerm_management_lock" "this" {
@@ -31,8 +31,8 @@ resource "azurerm_resource_group" "this" {
 
 resource "azurerm_api_management" "this" {
   name                = var.name
-  location            = azurerm_resource_group.this.location
-  resource_group_name = azurerm_resource_group.this.name
+  location            = var.location
+  resource_group_name = var.resource_group_name
   publisher_name      = var.publisher_name
   publisher_email     = var.publisher_email
   sku_name           = var.sku_name
