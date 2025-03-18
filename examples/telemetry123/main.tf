@@ -59,7 +59,7 @@ module "naming" {
 
 # This is required for resource modules
 resource "azurerm_resource_group" "this" {
-  location = module.regions.regions[random_integer.region_index.result].name
+  location = "East US 2" #module.regions.regions[random_integer.region_index.result].name
   name     = module.naming.resource_group.name_unique
 }
 
@@ -112,7 +112,7 @@ module "test" {
       log_categories = [
       "GatewayLogs",       # Logs related to ApiManagement Gateway
       "WebSocketConnectionLogs", # Logs related to Websocket Connections
-      "DeveloperPortalLogs"      # Logs related to Developer Portal usage
+      "DeveloperPortalAuditLogs"      # Logs related to Developer Portal usage
       # DeveloperPortalAuditLogs
     ]
     }

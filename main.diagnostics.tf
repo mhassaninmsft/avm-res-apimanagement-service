@@ -17,13 +17,8 @@ resource "azurerm_monitor_diagnostic_setting" "this" {
       category = enabled_log.value
     }
   }
-  # dynamic "enabled_log" {
-  #   for_each = each.value.log_groups
-
-  #   content {
-  #     category_group = enabled_log.value
-  #   }
-  # }
+  # we set the log_groups to empty list if log_categories is not empty,
+  # since only one of them can be used at a time and the priority is given to log_categories
     dynamic "enabled_log" {
     for_each = length(each.value.log_categories) == 0 ? each.value.log_groups : []
 
