@@ -113,7 +113,6 @@ module "test" {
       "GatewayLogs",       # Logs related to ApiManagement Gateway
       "WebSocketConnectionLogs", # Logs related to Websocket Connections
       "DeveloperPortalAuditLogs"      # Logs related to Developer Portal usage
-      # DeveloperPortalAuditLogs
     ]
     }
   }
