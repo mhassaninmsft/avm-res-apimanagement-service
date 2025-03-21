@@ -288,3 +288,207 @@ variable "tags" {
   default     = null
   description = "(Optional) Tags of the resource."
 }
+
+# AI generated 
+
+variable "additional_location" {
+  type = list(object({
+    location          = string
+    capacity          = optional(number, null)
+    zones             = optional(list(string), null)
+    public_ip_address_id = optional(string, null)
+    gateway_disabled  = optional(bool, null)
+    virtual_network_configuration = optional(object({
+      subnet_id = string
+    }), null)
+  }))
+  default     = []
+  description = "Additional datacenter locations where the API Management service should be provisioned."
+  nullable    = false
+}
+
+variable "certificate" {
+  type = list(object({
+    encoded_certificate  = string
+    store_name           = string
+    certificate_password = optional(string, null)
+  }))
+  default     = []
+  description = "Certificate configurations for the API Management service."
+  nullable    = false
+
+  validation {
+    condition     = length(var.certificate) <= 10
+    error_message = "A maximum of 10 certificates can be added to an API Management service."
+  }
+
+  validation {
+    condition     = alltrue([for cert in var.certificate : contains(["CertificateAuthority", "Root"], cert.store_name)])
+    error_message = "The store_name must be one of: 'CertificateAuthority', 'Root'."
+  }
+}
+
+variable "client_certificate_enabled" {
+  type        = bool
+  default     = false
+  description = "Enforce a client certificate to be presented on each request to the gateway. This is only supported when SKU type is Consumption."
+  nullable    = false
+}
+
+variable "delegation" {
+  type = object({
+    subscriptions_enabled      = optional(bool, false)
+    user_registration_enabled  = optional(bool, false)
+    url                        = optional(string, null)
+    validation_key             = optional(string, null)
+  })
+  default     = null
+  description = "Delegation settings for the API Management service."
+}
+
+variable "gateway_disabled" {
+  type        = bool
+  default     = false
+  description = "Disable the gateway in the main region? This is only supported when additional_location is set."
+  nullable    = false
+}
+
+variable "hostname_configuration" {
+  type = object({
+    management = optional(list(object({
+      host_name                   = string
+      key_vault_id                = optional(string, null)
+      certificate                 = optional(string, null)
+      certificate_password        = optional(string, null)
+      negotiate_client_certificate = optional(bool, false)
+      ssl_keyvault_identity_client_id = optional(string, null)
+    })), [])
+    portal = optional(list(object({
+      host_name                   = string
+      key_vault_id                = optional(string, null)
+      certificate                 = optional(string, null)
+      certificate_password        = optional(string, null)
+      negotiate_client_certificate = optional(bool, false)
+      ssl_keyvault_identity_client_id = optional(string, null)
+    })), [])
+    developer_portal = optional(list(object({
+      host_name                   = string
+      key_vault_id                = optional(string, null)
+      certificate                 = optional(string, null)
+      certificate_password        = optional(string, null)
+      negotiate_client_certificate = optional(bool, false)
+      ssl_keyvault_identity_client_id = optional(string, null)
+    })), [])
+    proxy = optional(list(object({
+      host_name                   = string
+      default_ssl_binding         = optional(bool, false)
+      key_vault_id                = optional(string, null)
+      certificate                 = optional(string, null)
+      certificate_password        = optional(string, null)
+      negotiate_client_certificate = optional(bool, false)
+      ssl_keyvault_identity_client_id = optional(string, null)
+    })), [])
+    scm = optional(list(object({
+      host_name                   = string
+      key_vault_id                = optional(string, null)
+      certificate                 = optional(string, null)
+      certificate_password        = optional(string, null)
+      negotiate_client_certificate = optional(bool, false)
+      ssl_keyvault_identity_client_id = optional(string, null)
+    })), [])
+  })
+  default     = null
+  description = "Hostname configuration for the API Management service."
+}
+
+variable "min_api_version" {
+  type        = string
+  default     = null
+  description = "The version which the control plane API calls to API Management service are limited with version equal to or newer than."
+}
+
+variable "notification_sender_email" {
+  type        = string
+  default     = null
+  description = "Email address from which the notification will be sent."
+}
+
+variable "protocols" {
+  type = object({
+    enable_http2 = optional(bool, false)
+  })
+  default     = null
+  description = "Protocol settings for the API Management service."
+}
+
+variable "public_ip_address_id" {
+  type        = string
+  default     = null
+  description = "ID of a standard SKU IPv4 Public IP. Only supported on Premium and Developer tiers when deployed in a virtual network."
+}
+
+variable "public_network_access_enabled" {
+  type        = bool
+  default     = true
+  description = "Is public access to the API Management service allowed? This only applies to the Management plane, not the API gateway or Developer portal."
+  nullable    = false
+}
+
+variable "security" {
+  type = object({
+    enable_backend_ssl30                                = optional(bool, false)
+    enable_backend_tls10                                = optional(bool, false)
+    enable_backend_tls11                                = optional(bool, false)
+    enable_frontend_ssl30                               = optional(bool, false)
+    enable_frontend_tls10                               = optional(bool, false)
+    enable_frontend_tls11                               = optional(bool, false)
+    tls_ecdhe_ecdsa_with_aes128_cbc_sha_ciphers_enabled = optional(bool, false)
+    tls_ecdhe_ecdsa_with_aes256_cbc_sha_ciphers_enabled = optional(bool, false)
+    tls_ecdhe_rsa_with_aes128_cbc_sha_ciphers_enabled   = optional(bool, false)
+    tls_ecdhe_rsa_with_aes256_cbc_sha_ciphers_enabled   = optional(bool, false)
+    tls_rsa_with_aes128_cbc_sha256_ciphers_enabled      = optional(bool, false)
+    tls_rsa_with_aes128_cbc_sha_ciphers_enabled         = optional(bool, false)
+    tls_rsa_with_aes128_gcm_sha256_ciphers_enabled      = optional(bool, false)
+    tls_rsa_with_aes256_gcm_sha384_ciphers_enabled      = optional(bool, false)
+    tls_rsa_with_aes256_cbc_sha256_ciphers_enabled      = optional(bool, false)
+    tls_rsa_with_aes256_cbc_sha_ciphers_enabled         = optional(bool, false)
+    triple_des_ciphers_enabled                          = optional(bool, false)
+  })
+  default     = null
+  description = "Security settings for the API Management service."
+}
+
+variable "sign_in" {
+  type = object({
+    enabled = bool
+  })
+  default     = null
+  description = "Sign-in settings for the API Management service. When enabled, anonymous users will be redirected to the sign-in page."
+}
+
+variable "sign_up" {
+  type = object({
+    enabled = bool
+    terms_of_service = object({
+      consent_required = bool
+      enabled          = bool
+      text             = optional(string, null)
+    })
+  })
+  default     = null
+  description = "Sign-up settings for the API Management service."
+}
+
+variable "tenant_access" {
+  type = object({
+    enabled = bool
+  })
+  default     = null
+  description = "Controls whether access to the management API is enabled. When enabled, the primary/secondary keys provide access to this API."
+}
+
+variable "zones" {
+  type        = list(string)
+  default     = null
+  description = "Specifies a list of Availability Zones in which this API Management service should be located. Only supported in the Premium tier."
+}

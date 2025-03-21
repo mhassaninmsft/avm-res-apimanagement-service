@@ -82,3 +82,8 @@ output "apim_management_url" {
 #   description = "The publisher URL of the API Management service."
 #   value       = azurerm_api_management.this.publisher_url
 # }
+
+output "private_endpoint" {
+  description = "The private endpoints created for the API Management service."
+  value       = azurerm_private_endpoint.this
+}
