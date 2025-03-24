@@ -1,30 +1,45 @@
 <!-- BEGIN_TF_DOCS -->
 # Default example
 
-export ARM_SUBSCRIPTION_ID='aa27a1b3-530a-4637-a1e6-6855033a65e5'
 This deploys the module in its simplest form.
 
 ```hcl
 terraform {
-  required_version = "~> 1.5"
+  required_version = ">= 1.9, < 2.0"
   required_providers {
+    azapi = {
+      source  = "Azure/azapi"
+      version = "~> 2.0"
+    }
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 3.74"
+      version = "4.21.10"
     }
     modtm = {
-      source  = "azure/modtm"
-      version = "~> 0.3"
+      source  = "Azure/modtm"
+      version = "0.3.2"
     }
     random = {
       source  = "hashicorp/random"
-      version = "~> 3.5"
+      version = "3.6.2"
     }
   }
 }
 
 provider "azurerm" {
-  features {}
+
+  features {
+    key_vault {
+      purge_soft_delete_on_destroy = false
+    }
+    resource_group {
+      prevent_deletion_if_contains_resources = false
+    }
+    #     api_management {
+    # purge_soft_delete_on_destroy = false
+    #     min_api_version = "2024-10-01-preview"
+    #     }
+  }
 }
 
 
@@ -62,12 +77,35 @@ module "test" {
   source = "../../"
   # source             = "Azure/avm-<res/ptn>-<name>/azurerm"
   # ...
-  location            = azurerm_resource_group.this.location
-  name                = "TODO" # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
+  location = "eastus2" # TODO: Remove this line
+  # location            = azurerm_resource_group.this.location
+  name = module.naming.api_management.name_unique # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
+  # name                = "TODO" # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
   resource_group_name = azurerm_resource_group.this.name
-
+  publisher_email     = "mhassanin@microsoft.com"
+  publisher_name      = "Mohamed Company"
+  sku_name            = "Premium_1"
+  # sku_name = "Developer_1"
+  tags = {
+    environment = "test"
+    cost_center = "test"
+  }
   enable_telemetry = var.enable_telemetry # see variables.tf
+  # virtual_network_type = "External"
+  # virtual_network_subnet_id = "/subscriptions/aa27a1b3-530a-4637-a1e6-6855033a65e5/resourceGroups/rg-wwgpr/providers/Microsoft.Network/virtualNetworks/vnetwwgpr/subnets/apim-subnet-3"
+  virtual_network_type      = "Internal"
+  virtual_network_subnet_id = "/subscriptions/aa27a1b3-530a-4637-a1e6-6855033a65e5/resourceGroups/rg-wwgpr/providers/Microsoft.Network/virtualNetworks/vnetwwgpr/subnets/apim-subnet-4"
 }
+
+
+# name                = "mhasaaninapim4555"
+# resource_group_name = "mhassanin-rg"
+# location            = "eastus2"
+# publisher_name      = "Mohamed Company"
+# publisher_email     = "mhassanin@microsoft.com"
+# sku_name            = "Developer_1"
+
+# export ARM_SUBSCRIPTION_ID="aa27a1b3-530a-4637-a1e6-6855033a65e5"
 ```
 
 <!-- markdownlint-disable MD033 -->
@@ -75,28 +113,22 @@ module "test" {
 
 The following requirements are needed by this module:
 
-- <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (~> 1.5)
+- <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (>= 1.9, < 2.0)
 
-- <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (~> 3.74)
+- <a name="requirement_azapi"></a> [azapi](#requirement\_azapi) (~> 2.0)
 
-- <a name="requirement_modtm"></a> [modtm](#requirement\_modtm) (~> 0.3)
+- <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (4.21.10)
 
-- <a name="requirement_random"></a> [random](#requirement\_random) (~> 3.5)
+- <a name="requirement_modtm"></a> [modtm](#requirement\_modtm) (0.3.2)
 
-## Providers
-
-The following providers are used by this module:
-
-- <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) (~> 3.74)
-
-- <a name="provider_random"></a> [random](#provider\_random) (~> 3.5)
+- <a name="requirement_random"></a> [random](#requirement\_random) (3.6.2)
 
 ## Resources
 
 The following resources are used by this module:
 
-- [azurerm_resource_group.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) (resource)
-- [random_integer.region_index](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/integer) (resource)
+- [azurerm_resource_group.this](https://registry.terraform.io/providers/hashicorp/azurerm/4.21.10/docs/resources/resource_group) (resource)
+- [random_integer.region_index](https://registry.terraform.io/providers/hashicorp/random/3.6.2/docs/resources/integer) (resource)
 
 <!-- markdownlint-disable MD013 -->
 ## Required Inputs

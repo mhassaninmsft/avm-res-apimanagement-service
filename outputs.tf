@@ -75,7 +75,7 @@ output "apim_gateway_url" {
 }
 output "apim_management_url" {
   description = "The management URL of the API Management service."
-  value       = azurerm_api_management.this.management_api_url 
+  value       = azurerm_api_management.this.management_api_url
 }
 
 # output "apim_publisher_url" {

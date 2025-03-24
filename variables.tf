@@ -40,7 +40,7 @@ variable "sku_name" {
   type        = string
   description = "The SKU name of the API Management service."
   default     = "Developer_1"
-  
+
   validation {
     condition     = can(regex("^(Consumption|Developer|Basic|Standard|Premium)_([1-9]|[1-9][0-9])$", var.sku_name))
     error_message = "The sku_name must be a string consisting of two parts separated by an underscore(_). The first part must be one of: Consumption, Developer, Basic, Standard, or Premium. The second part must be a positive integer between 1-99 (e.g. Developer_1)."
@@ -52,7 +52,7 @@ variable "virtual_network_subnet_id" {
   type        = string
   description = "The ID of the subnet in the virtual network where the API Management service will be deployed."
   default     = null
-  
+
   validation {
     condition     = var.virtual_network_type == "None" ? var.virtual_network_subnet_id == null : true
     error_message = "The virtual_network_subnet_id must not be set when virtual_network_type is None."
@@ -293,11 +293,11 @@ variable "tags" {
 
 variable "additional_location" {
   type = list(object({
-    location          = string
-    capacity          = optional(number, null)
-    zones             = optional(list(string), null)
+    location             = string
+    capacity             = optional(number, null)
+    zones                = optional(list(string), null)
     public_ip_address_id = optional(string, null)
-    gateway_disabled  = optional(bool, null)
+    gateway_disabled     = optional(bool, null)
     virtual_network_configuration = optional(object({
       subnet_id = string
     }), null)
@@ -337,10 +337,10 @@ variable "client_certificate_enabled" {
 
 variable "delegation" {
   type = object({
-    subscriptions_enabled      = optional(bool, false)
-    user_registration_enabled  = optional(bool, false)
-    url                        = optional(string, null)
-    validation_key             = optional(string, null)
+    subscriptions_enabled     = optional(bool, false)
+    user_registration_enabled = optional(bool, false)
+    url                       = optional(string, null)
+    validation_key            = optional(string, null)
   })
   default     = null
   description = "Delegation settings for the API Management service."
@@ -356,44 +356,44 @@ variable "gateway_disabled" {
 variable "hostname_configuration" {
   type = object({
     management = optional(list(object({
-      host_name                   = string
-      key_vault_id                = optional(string, null)
-      certificate                 = optional(string, null)
-      certificate_password        = optional(string, null)
-      negotiate_client_certificate = optional(bool, false)
+      host_name                       = string
+      key_vault_id                    = optional(string, null)
+      certificate                     = optional(string, null)
+      certificate_password            = optional(string, null)
+      negotiate_client_certificate    = optional(bool, false)
       ssl_keyvault_identity_client_id = optional(string, null)
     })), [])
     portal = optional(list(object({
-      host_name                   = string
-      key_vault_id                = optional(string, null)
-      certificate                 = optional(string, null)
-      certificate_password        = optional(string, null)
-      negotiate_client_certificate = optional(bool, false)
+      host_name                       = string
+      key_vault_id                    = optional(string, null)
+      certificate                     = optional(string, null)
+      certificate_password            = optional(string, null)
+      negotiate_client_certificate    = optional(bool, false)
       ssl_keyvault_identity_client_id = optional(string, null)
     })), [])
     developer_portal = optional(list(object({
-      host_name                   = string
-      key_vault_id                = optional(string, null)
-      certificate                 = optional(string, null)
-      certificate_password        = optional(string, null)
-      negotiate_client_certificate = optional(bool, false)
+      host_name                       = string
+      key_vault_id                    = optional(string, null)
+      certificate                     = optional(string, null)
+      certificate_password            = optional(string, null)
+      negotiate_client_certificate    = optional(bool, false)
       ssl_keyvault_identity_client_id = optional(string, null)
     })), [])
     proxy = optional(list(object({
-      host_name                   = string
-      default_ssl_binding         = optional(bool, false)
-      key_vault_id                = optional(string, null)
-      certificate                 = optional(string, null)
-      certificate_password        = optional(string, null)
-      negotiate_client_certificate = optional(bool, false)
+      host_name                       = string
+      default_ssl_binding             = optional(bool, false)
+      key_vault_id                    = optional(string, null)
+      certificate                     = optional(string, null)
+      certificate_password            = optional(string, null)
+      negotiate_client_certificate    = optional(bool, false)
       ssl_keyvault_identity_client_id = optional(string, null)
     })), [])
     scm = optional(list(object({
-      host_name                   = string
-      key_vault_id                = optional(string, null)
-      certificate                 = optional(string, null)
-      certificate_password        = optional(string, null)
-      negotiate_client_certificate = optional(bool, false)
+      host_name                       = string
+      key_vault_id                    = optional(string, null)
+      certificate                     = optional(string, null)
+      certificate_password            = optional(string, null)
+      negotiate_client_certificate    = optional(bool, false)
       ssl_keyvault_identity_client_id = optional(string, null)
     })), [])
   })

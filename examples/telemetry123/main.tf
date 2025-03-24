@@ -21,7 +21,7 @@ terraform {
 }
 
 provider "azurerm" {
-  
+
   features {
     key_vault {
       purge_soft_delete_on_destroy = false
@@ -29,10 +29,10 @@ provider "azurerm" {
     resource_group {
       prevent_deletion_if_contains_resources = false
     }
-#     api_management {
-# purge_soft_delete_on_destroy = false
-#     min_api_version = "2024-10-01-preview"
-#     }
+    #     api_management {
+    # purge_soft_delete_on_destroy = false
+    #     min_api_version = "2024-10-01-preview"
+    #     }
   }
 }
 
@@ -84,12 +84,12 @@ module "test" {
   # ...
   location = "eastus2" # TODO: Remove this line
   # location            = azurerm_resource_group.this.location
-  name                = module.naming.api_management.name_unique # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
+  name = module.naming.api_management.name_unique # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
   # name                = "TODO" # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
   resource_group_name = azurerm_resource_group.this.name
-  publisher_email = "mhassanin@microsoft.com"
-  publisher_name = "John Wick"
-  sku_name = "Developer_1"
+  publisher_email     = "mhassanin@microsoft.com"
+  publisher_name      = "John Wick"
+  sku_name            = "Developer_1"
   # sku_name = "Developer_1"
   tags = {
     environment = "test"
@@ -100,20 +100,20 @@ module "test" {
     diag = {
       name                  = "aml${module.naming.monitor_diagnostic_setting.name_unique}"
       workspace_resource_id = azurerm_log_analytics_workspace.diag.id
-    #   log_categories = [
-    #   "GatewayLogs",       # Logs related to ApiManagement Gateway
-    #   "WebSocketConnectionLogs", # Logs related to Websocket Connections
-    #   "DeveloperPortalLogs"      # Logs related to Developer Portal usage
-    # ]
+      #   log_categories = [
+      #   "GatewayLogs",       # Logs related to ApiManagement Gateway
+      #   "WebSocketConnectionLogs", # Logs related to Websocket Connections
+      #   "DeveloperPortalLogs"      # Logs related to Developer Portal usage
+      # ]
     },
     diag2 = {
       name                  = "aml2${module.naming.monitor_diagnostic_setting.name_unique}"
       workspace_resource_id = azurerm_log_analytics_workspace.diag2.id
       log_categories = [
-      "GatewayLogs",       # Logs related to ApiManagement Gateway
-      "WebSocketConnectionLogs", # Logs related to Websocket Connections
-      "DeveloperPortalAuditLogs"      # Logs related to Developer Portal usage
-    ]
+        "GatewayLogs",             # Logs related to ApiManagement Gateway
+        "WebSocketConnectionLogs", # Logs related to Websocket Connections
+        "DeveloperPortalAuditLogs" # Logs related to Developer Portal usage
+      ]
     }
   }
 }

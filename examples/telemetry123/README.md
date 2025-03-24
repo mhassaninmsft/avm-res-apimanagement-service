@@ -1,30 +1,46 @@
 <!-- BEGIN_TF_DOCS -->
 # Default example
 
-export ARM_SUBSCRIPTION_ID='aa27a1b3-530a-4637-a1e6-6855033a65e5'
-This deploys the module in its simplest form.
+This deploys the module with telemetry enabled and deploys azure log analytics workspace and configures the module to send logs to it.
+It shows the user can specify which kind of APIM logs to send to the workspace.
 
 ```hcl
 terraform {
-  required_version = "~> 1.5"
+  required_version = ">= 1.9, < 2.0"
   required_providers {
+    azapi = {
+      source  = "Azure/azapi"
+      version = "~> 2.0"
+    }
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 3.74"
+      version = "~> 4.0"
     }
     modtm = {
-      source  = "azure/modtm"
-      version = "~> 0.3"
+      source  = "Azure/modtm"
+      version = "0.3.2"
     }
     random = {
       source  = "hashicorp/random"
-      version = "~> 3.5"
+      version = "3.6.2"
     }
   }
 }
 
 provider "azurerm" {
-  features {}
+
+  features {
+    key_vault {
+      purge_soft_delete_on_destroy = false
+    }
+    resource_group {
+      prevent_deletion_if_contains_resources = false
+    }
+    #     api_management {
+    # purge_soft_delete_on_destroy = false
+    #     min_api_version = "2024-10-01-preview"
+    #     }
+  }
 }
 
 
@@ -50,10 +66,21 @@ module "naming" {
 
 # This is required for resource modules
 resource "azurerm_resource_group" "this" {
-  location = module.regions.regions[random_integer.region_index.result].name
+  location = "East US 2" #module.regions.regions[random_integer.region_index.result].name
   name     = module.naming.resource_group.name_unique
 }
 
+resource "azurerm_log_analytics_workspace" "diag" {
+  location            = azurerm_resource_group.this.location
+  name                = "diag${module.naming.log_analytics_workspace.name_unique}"
+  resource_group_name = azurerm_resource_group.this.name
+}
+
+resource "azurerm_log_analytics_workspace" "diag2" {
+  location            = azurerm_resource_group.this.location
+  name                = "diag2${module.naming.log_analytics_workspace.name_unique}"
+  resource_group_name = azurerm_resource_group.this.name
+}
 # This is the module call
 # Do not specify location here due to the randomization above.
 # Leaving location as `null` will cause the module to use the resource group location
@@ -62,12 +89,51 @@ module "test" {
   source = "../../"
   # source             = "Azure/avm-<res/ptn>-<name>/azurerm"
   # ...
-  location            = azurerm_resource_group.this.location
-  name                = "TODO" # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
+  location = "eastus2" # TODO: Remove this line
+  # location            = azurerm_resource_group.this.location
+  name = module.naming.api_management.name_unique # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
+  # name                = "TODO" # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
   resource_group_name = azurerm_resource_group.this.name
-
+  publisher_email     = "mhassanin@microsoft.com"
+  publisher_name      = "John Wick"
+  sku_name            = "Developer_1"
+  # sku_name = "Developer_1"
+  tags = {
+    environment = "test"
+    cost_center = "test"
+  }
   enable_telemetry = var.enable_telemetry # see variables.tf
+  diagnostic_settings = {
+    diag = {
+      name                  = "aml${module.naming.monitor_diagnostic_setting.name_unique}"
+      workspace_resource_id = azurerm_log_analytics_workspace.diag.id
+      #   log_categories = [
+      #   "GatewayLogs",       # Logs related to ApiManagement Gateway
+      #   "WebSocketConnectionLogs", # Logs related to Websocket Connections
+      #   "DeveloperPortalLogs"      # Logs related to Developer Portal usage
+      # ]
+    },
+    diag2 = {
+      name                  = "aml2${module.naming.monitor_diagnostic_setting.name_unique}"
+      workspace_resource_id = azurerm_log_analytics_workspace.diag2.id
+      log_categories = [
+        "GatewayLogs",             # Logs related to ApiManagement Gateway
+        "WebSocketConnectionLogs", # Logs related to Websocket Connections
+        "DeveloperPortalAuditLogs" # Logs related to Developer Portal usage
+      ]
+    }
+  }
 }
+
+
+# name                = "mhasaaninapim4555"
+# resource_group_name = "mhassanin-rg"
+# location            = "eastus2"
+# publisher_name      = "Mohamed Company"
+# publisher_email     = "mhassanin@microsoft.com"
+# sku_name            = "Developer_1"
+
+# export ARM_SUBSCRIPTION_ID="aa27a1b3-530a-4637-a1e6-6855033a65e5"
 ```
 
 <!-- markdownlint-disable MD033 -->
@@ -75,28 +141,24 @@ module "test" {
 
 The following requirements are needed by this module:
 
-- <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (~> 1.5)
+- <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (>= 1.9, < 2.0)
 
-- <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (~> 3.74)
+- <a name="requirement_azapi"></a> [azapi](#requirement\_azapi) (~> 2.0)
 
-- <a name="requirement_modtm"></a> [modtm](#requirement\_modtm) (~> 0.3)
+- <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (~> 4.0)
 
-- <a name="requirement_random"></a> [random](#requirement\_random) (~> 3.5)
+- <a name="requirement_modtm"></a> [modtm](#requirement\_modtm) (0.3.2)
 
-## Providers
-
-The following providers are used by this module:
-
-- <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) (~> 3.74)
-
-- <a name="provider_random"></a> [random](#provider\_random) (~> 3.5)
+- <a name="requirement_random"></a> [random](#requirement\_random) (3.6.2)
 
 ## Resources
 
 The following resources are used by this module:
 
+- [azurerm_log_analytics_workspace.diag](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/log_analytics_workspace) (resource)
+- [azurerm_log_analytics_workspace.diag2](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/log_analytics_workspace) (resource)
 - [azurerm_resource_group.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) (resource)
-- [random_integer.region_index](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/integer) (resource)
+- [random_integer.region_index](https://registry.terraform.io/providers/hashicorp/random/3.6.2/docs/resources/integer) (resource)
 
 <!-- markdownlint-disable MD013 -->
 ## Required Inputs

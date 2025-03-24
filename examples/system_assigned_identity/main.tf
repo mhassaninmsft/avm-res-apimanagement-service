@@ -21,7 +21,7 @@ terraform {
 }
 
 provider "azurerm" {
-  
+
   features {
     key_vault {
       purge_soft_delete_on_destroy = false
@@ -29,10 +29,10 @@ provider "azurerm" {
     resource_group {
       prevent_deletion_if_contains_resources = false
     }
-#     api_management {
-# purge_soft_delete_on_destroy = false
-#     min_api_version = "2024-10-01-preview"
-#     }
+    #     api_management {
+    # purge_soft_delete_on_destroy = false
+    #     min_api_version = "2024-10-01-preview"
+    #     }
   }
 }
 
@@ -73,12 +73,12 @@ module "test" {
   # ...
   location = "eastus2" # TODO: Remove this line
   # location            = azurerm_resource_group.this.location
-  name                = module.naming.api_management.name_unique # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
+  name = module.naming.api_management.name_unique # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
   # name                = "TODO" # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
   resource_group_name = azurerm_resource_group.this.name
-  publisher_email = "mhassanin@microsoft.com"
-  publisher_name = "Mohamed Company"
-  sku_name = "Premium_1"
+  publisher_email     = "mhassanin@microsoft.com"
+  publisher_name      = "Mohamed Company"
+  sku_name            = "Premium_1"
   # sku_name = "Developer_1"
   tags = {
     environment = "test"
@@ -88,4 +88,4 @@ module "test" {
   managed_identities = {
     system_assigned = true
   }
- }
+}

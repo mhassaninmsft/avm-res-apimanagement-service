@@ -21,7 +21,7 @@ terraform {
 }
 
 provider "azurerm" {
-  
+
   features {
     key_vault {
       purge_soft_delete_on_destroy = false
@@ -29,10 +29,10 @@ provider "azurerm" {
     resource_group {
       prevent_deletion_if_contains_resources = false
     }
-#     api_management {
-# purge_soft_delete_on_destroy = false
-#     min_api_version = "2024-10-01-preview"
-#     }
+    #     api_management {
+    # purge_soft_delete_on_destroy = false
+    #     min_api_version = "2024-10-01-preview"
+    #     }
   }
 }
 
@@ -73,12 +73,12 @@ module "test" {
   # ...
   location = "eastus2" # TODO: Remove this line
   # location            = azurerm_resource_group.this.location
-  name                = module.naming.api_management.name_unique # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
+  name = module.naming.api_management.name_unique # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
   # name                = "TODO" # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
   resource_group_name = azurerm_resource_group.this.name
-  publisher_email = "mhassanin@microsoft.com"
-  publisher_name = "Mohamed Company"
-  sku_name = "Developer_1"
+  publisher_email     = "mhassanin@microsoft.com"
+  publisher_name      = "Mohamed Company"
+  sku_name            = "Developer_1"
   tags = {
     environment = "test"
     cost_center = "test"
@@ -86,7 +86,7 @@ module "test" {
   enable_telemetry = var.enable_telemetry # see variables.tf
   # virtual_network_type = "External"
   # virtual_network_subnet_id = "/subscriptions/aa27a1b3-530a-4637-a1e6-6855033a65e5/resourceGroups/rg-wwgpr/providers/Microsoft.Network/virtualNetworks/vnetwwgpr/subnets/apim-subnet-3"
-  virtual_network_type = "Internal"
+  virtual_network_type      = "Internal"
   virtual_network_subnet_id = "/subscriptions/aa27a1b3-530a-4637-a1e6-6855033a65e5/resourceGroups/rg-wwgpr/providers/Microsoft.Network/virtualNetworks/vnetwwgpr/subnets/apim-subnet-4"
 }
 

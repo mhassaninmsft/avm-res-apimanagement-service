@@ -66,11 +66,11 @@ resource "azurerm_resource_group" "this" {
 
 # Create Virtual Network and Subnets
 resource "azurerm_virtual_network" "this" {
-  name                = "${module.naming.virtual_network.name_unique}"
+  name                = module.naming.virtual_network.name_unique
   address_space       = ["10.0.0.0/16"]
   location            = azurerm_resource_group.this.location
   resource_group_name = azurerm_resource_group.this.name
-  
+
   tags = {
     environment = "test"
     cost_center = "test"
@@ -101,17 +101,17 @@ resource "azurerm_subnet" "default" {
 
 # Private DNS Zone for API Management
 module "private_dns_apim" {
-  source               = "Azure/avm-res-network-privatednszone/azurerm"
-  version              = "~> 0.2"
-  domain_name          = "privatelink.azure-api.net"
-  resource_group_name  = azurerm_resource_group.this.name
+  source              = "Azure/avm-res-network-privatednszone/azurerm"
+  version             = "~> 0.2"
+  domain_name         = "privatelink.azure-api.net"
+  resource_group_name = azurerm_resource_group.this.name
   virtual_network_links = {
     dnslink = {
       vnetlinkname = "privatelink-azure-api-net"
       vnetid       = azurerm_virtual_network.this.id
     }
   }
-  enable_telemetry     = var.enable_telemetry
+  enable_telemetry = var.enable_telemetry
 }
 
 resource "azurerm_user_assigned_identity" "cmk" {
@@ -125,7 +125,7 @@ resource "azurerm_user_assigned_identity" "cmk" {
 # Leaving location as `null` will cause the module to use the resource group location
 # with a data source.
 module "test" {
-  source              = "../../"
+  source = "../../"
   # Remove the hardcoded location and use the resource group location
   location            = azurerm_resource_group.this.location
   name                = module.naming.api_management.name_unique
@@ -137,19 +137,19 @@ module "test" {
     environment = "test"
     cost_center = "test"
   }
-  enable_telemetry    = var.enable_telemetry
-  
+  enable_telemetry = var.enable_telemetry
+
   # Add private endpoint configuration
   private_endpoints = {
     endpoint1 = {
       name               = "pe-${module.naming.api_management.name_unique}"
       subnet_resource_id = azurerm_subnet.private_endpoints.id
-      
+
       # Link to the private DNS zone we created
       private_dns_zone_resource_ids = [
         module.private_dns_apim.resource.id
       ]
-      
+
       tags = {
         environment = "test"
         service     = "apim"

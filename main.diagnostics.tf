@@ -2,7 +2,7 @@ resource "azurerm_monitor_diagnostic_setting" "this" {
   for_each = var.diagnostic_settings
 
   name                           = each.value.name != null ? each.value.name : "diag-${var.name}"
-  target_resource_id             = azurerm_api_management.this.id 
+  target_resource_id             = azurerm_api_management.this.id
   eventhub_authorization_rule_id = each.value.event_hub_authorization_rule_resource_id
   eventhub_name                  = each.value.event_hub_name
   log_analytics_destination_type = each.value.log_analytics_destination_type
@@ -19,7 +19,7 @@ resource "azurerm_monitor_diagnostic_setting" "this" {
   }
   # we set the log_groups to empty list if log_categories is not empty,
   # since only one of them can be used at a time and the priority is given to log_categories
-    dynamic "enabled_log" {
+  dynamic "enabled_log" {
     for_each = length(each.value.log_categories) == 0 ? each.value.log_groups : []
 
     content {
