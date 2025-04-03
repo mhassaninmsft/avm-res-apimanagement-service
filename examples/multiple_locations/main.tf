@@ -92,6 +92,7 @@ module "test" {
   }]
  }
 
+# does this need to be in the module?
 
 # name                = "mhasaaninapim4555"
 # resource_group_name = "mhassanin-rg"
