@@ -92,12 +92,3 @@ module "test" {
   }]
  }
 
-
-# name                = "mhasaaninapim4555"
-# resource_group_name = "mhassanin-rg"
-# location            = "eastus2"
-# publisher_name      = "Mohamed Company"
-# publisher_email     = "mhassanin@microsoft.com"
-# sku_name            = "Developer_1"
-
-# export ARM_SUBSCRIPTION_ID="aa27a1b3-530a-4637-a1e6-6855033a65e5"
