@@ -71,13 +71,12 @@ module "test" {
   source = "../../"
   # source             = "Azure/avm-<res/ptn>-<name>/azurerm"
   # ...
-  location = "eastus2" # TODO: Remove this line
-  # location            = azurerm_resource_group.this.location
+  location            = azurerm_resource_group.this.location
   name = module.naming.api_management.name_unique # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
   # name                = "TODO" # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
   resource_group_name = azurerm_resource_group.this.name
-  publisher_email     = "mhassanin@microsoft.com"
-  publisher_name      = "Mohamed Company"
+  publisher_email     = var.publisher_email # see variables.tf
+  publisher_name      = "Apim Example Publisher"
   sku_name            = "Premium_1"
   # sku_name = "Developer_1"
   tags = {

@@ -9,7 +9,7 @@ terraform {
     }
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "4.21.9"
+      version = "~> 4.0"
     }
     modtm = {
       source  = "Azure/modtm"
@@ -32,7 +32,6 @@ provider "azurerm" {
     }
     #     api_management {
     # purge_soft_delete_on_destroy = false
-    #     min_api_version = "2024-10-01-preview"
     #     }
   }
 }
@@ -82,7 +81,6 @@ resource "azurerm_subnet" "private_endpoints" {
   resource_group_name  = azurerm_resource_group.this.name
   virtual_network_name = azurerm_virtual_network.this.name
   address_prefixes     = ["10.0.1.0/24"]
-  # private_endpoint_network_policies = "Enabled"
 }
 
 resource "azurerm_subnet" "apim_subnet" {
@@ -130,8 +128,8 @@ module "test" {
   location            = azurerm_resource_group.this.location
   name                = module.naming.api_management.name_unique
   resource_group_name = azurerm_resource_group.this.name
-  publisher_email     = "mhassanin@microsoft.com"
-  publisher_name      = "Mohamed Company"
+  publisher_email     = var.publisher_email # see variables.tf
+  publisher_name      = "Apim Example Publisher"
   sku_name            = "Developer_1"
   tags = {
     environment = "test"
@@ -173,9 +171,5 @@ module "test" {
       principal_id               = azurerm_user_assigned_identity.cmk.principal_id
     }
   }
-
-  # wait_for_rbac_before_key_operations = {
-  #   create = "70s"
-  # }
 
 }

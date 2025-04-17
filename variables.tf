@@ -27,13 +27,13 @@ variable "resource_group_name" {
 variable "publisher_name" {
   type        = string
   description = "The name of the API Management service publisher."
-  default     = "Mohamed Company"
+  default     = "Apim Example Publisher"
 }
 
 variable "publisher_email" {
   type        = string
   description = "The email of the API Management service publisher."
-  default     = "mhassanin@microsoft.com"
+  default     = ""
 }
 
 variable "sku_name" {
@@ -224,7 +224,7 @@ DESCRIPTION
   nullable    = false
   validation {
     condition     = var.virtual_network_type == "None" || length(var.private_endpoints) == 0
-    error_message = "Private endpoints cannot be used with API Management in Internal virtual network mode. Use either private endpoints (with virtual_network_type = None ) or Internal/External virtual network mode."
+    error_message = "Private endpoints cannot be used with API Management in Internal or External virtual network mode. Use either private endpoints (with virtual_network_type = None ) or Internal/External virtual network mode."
   }
 }
 

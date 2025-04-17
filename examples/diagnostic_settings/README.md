@@ -94,7 +94,7 @@ module "test" {
   name = module.naming.api_management.name_unique # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
   # name                = "TODO" # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
   resource_group_name = azurerm_resource_group.this.name
-  publisher_email     = "mhassanin@microsoft.com"
+  publisher_email     = ""
   publisher_name      = "John Wick"
   sku_name            = "Developer_1"
   # sku_name = "Developer_1"
@@ -129,8 +129,8 @@ module "test" {
 # name                = "mhasaaninapim4555"
 # resource_group_name = "mhassanin-rg"
 # location            = "eastus2"
-# publisher_name      = "Mohamed Company"
-# publisher_email     = "mhassanin@microsoft.com"
+# publisher_name      = "Apim Example Publisher"
+# publisher_email     = ""
 # sku_name            = "Developer_1"
 
 # export ARM_SUBSCRIPTION_ID="aa27a1b3-530a-4637-a1e6-6855033a65e5"

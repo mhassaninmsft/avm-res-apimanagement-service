@@ -7,7 +7,7 @@ terraform {
     }
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "4.21.9"
+      version = "~> 4.0"
     }
     modtm = {
       source  = "Azure/modtm"
@@ -120,8 +120,8 @@ module "test" {
   location            = azurerm_resource_group.this.location
   name                = module.naming.api_management.name_unique
   resource_group_name = azurerm_resource_group.this.name
-  publisher_email     = "mhassanin@microsoft.com"
-  publisher_name      = "Mohamed Company"
+  publisher_email     = var.publisher_email # see variables.tf
+  publisher_name      = "Apim Example Publisher"
   sku_name            = "Developer_1"
   tags = {
     environment = "test"
@@ -133,21 +133,4 @@ module "test" {
   virtual_network_type      = "External"
   virtual_network_subnet_id = azurerm_subnet.apim_subnet.id
 
-  # Add private endpoint configuration
-  # private_endpoints = {
-  #   endpoint1 = {
-  #     name               = "pe-${module.naming.api_management.name_unique}"
-  #     subnet_resource_id = azurerm_subnet.private_endpoints.id
-
-  #     # Link to the private DNS zone we created
-  #     private_dns_zone_resource_ids = [
-  #       module.private_dns_apim.resource.id
-  #     ]
-
-  #     tags = {
-  #       environment = "test"
-  #       service     = "apim"
-  #     }
-  #   }
-  # }
 }

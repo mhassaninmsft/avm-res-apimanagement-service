@@ -126,8 +126,8 @@ module "test" {
   location            = azurerm_resource_group.this.location
   name                = module.naming.api_management.name_unique
   resource_group_name = azurerm_resource_group.this.name
-  publisher_email     = "mhassanin@microsoft.com"
-  publisher_name      = "Mohamed Company"
+  publisher_email     = ""
+  publisher_name      = "Apim Example Publisher"
   sku_name            = "Developer_1"
   tags = {
     environment = "test"

@@ -420,7 +420,7 @@ Description: The email of the API Management service publisher.
 
 Type: `string`
 
-Default: `"mhassanin@microsoft.com"`
+Default: `""`
 
 ### <a name="input_publisher_name"></a> [publisher\_name](#input\_publisher\_name)
 
@@ -428,7 +428,7 @@ Description: The name of the API Management service publisher.
 
 Type: `string`
 
-Default: `"Mohamed Company"`
+Default: `"Apim Example Publisher"`
 
 ### <a name="input_role_assignments"></a> [role\_assignments](#input\_role\_assignments)
 
