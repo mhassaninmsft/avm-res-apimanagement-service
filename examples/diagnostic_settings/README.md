@@ -89,12 +89,12 @@ module "test" {
   source = "../../"
   # source             = "Azure/avm-<res/ptn>-<name>/azurerm"
   # ...
-  location = "eastus2" # TODO: Remove this line
+  location = "eastus2" # diagnostoc settings are not available in all regions
   # location            = azurerm_resource_group.this.location
   name = module.naming.api_management.name_unique # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
   # name                = "TODO" # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
   resource_group_name = azurerm_resource_group.this.name
-  publisher_email     = ""
+  publisher_email     = var.publisher_email
   publisher_name      = "John Wick"
   sku_name            = "Developer_1"
   # sku_name = "Developer_1"
@@ -107,11 +107,6 @@ module "test" {
     diag = {
       name                  = "aml${module.naming.monitor_diagnostic_setting.name_unique}"
       workspace_resource_id = azurerm_log_analytics_workspace.diag.id
-      #   log_categories = [
-      #   "GatewayLogs",       # Logs related to ApiManagement Gateway
-      #   "WebSocketConnectionLogs", # Logs related to Websocket Connections
-      #   "DeveloperPortalLogs"      # Logs related to Developer Portal usage
-      # ]
     },
     diag2 = {
       name                  = "aml2${module.naming.monitor_diagnostic_setting.name_unique}"
@@ -125,15 +120,6 @@ module "test" {
   }
 }
 
-
-# name                = "mhasaaninapim4555"
-# resource_group_name = "mhassanin-rg"
-# location            = "eastus2"
-# publisher_name      = "Apim Example Publisher"
-# publisher_email     = ""
-# sku_name            = "Developer_1"
-
-# export ARM_SUBSCRIPTION_ID="aa27a1b3-530a-4637-a1e6-6855033a65e5"
 ```
 
 <!-- markdownlint-disable MD033 -->
@@ -163,7 +149,13 @@ The following resources are used by this module:
 <!-- markdownlint-disable MD013 -->
 ## Required Inputs
 
-No required inputs.
+The following input variables are required:
+
+### <a name="input_publisher_email"></a> [publisher\_email](#input\_publisher\_email)
+
+Description: The email address of the publisher.
+
+Type: `string`
 
 ## Optional Inputs
 

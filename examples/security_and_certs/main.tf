@@ -70,8 +70,8 @@ module "test" {
   source = "../../"
   # source             = "Azure/avm-<res/ptn>-<name>/azurerm"
   # ...
-  location            = azurerm_resource_group.this.location
-  name = module.naming.api_management.name_unique # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
+  location = azurerm_resource_group.this.location
+  name     = module.naming.api_management.name_unique # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
   # name                = "TODO" # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
   resource_group_name = azurerm_resource_group.this.name
   publisher_email     = var.publisher_email # see variables.tf
@@ -87,7 +87,7 @@ module "test" {
     system_assigned = true
   }
   security = {
-    enable_backend_ssl30 = true
+    enable_backend_ssl30                           = true
     tls_rsa_with_aes128_gcm_sha256_ciphers_enabled = true
   }
 }

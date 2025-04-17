@@ -85,4 +85,4 @@ module "test" {
     cost_center = "test"
   }
   enable_telemetry = var.enable_telemetry # see variables.tf
- }
+}

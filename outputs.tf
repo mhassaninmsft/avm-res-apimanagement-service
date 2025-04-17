@@ -4,7 +4,7 @@
 output "resource" {
   description = "The API Management service resource."
   value       = azurerm_api_management.this
-  sensitive = true
+  sensitive   = true
 }
 
 output "id" {
@@ -84,9 +84,9 @@ output "additional_locations" {
 output "tenant_access" {
   description = "The tenant access information for the API Management Service."
   value = {
-    tenant_id      = try(azurerm_api_management.this.tenant_access[0].tenant_id, null)
-    primary_key    = try(azurerm_api_management.this.tenant_access[0].primary_key, null)
-    secondary_key  = try(azurerm_api_management.this.tenant_access[0].secondary_key, null)
+    tenant_id     = try(azurerm_api_management.this.tenant_access[0].tenant_id, null)
+    primary_key   = try(azurerm_api_management.this.tenant_access[0].primary_key, null)
+    secondary_key = try(azurerm_api_management.this.tenant_access[0].secondary_key, null)
   }
   sensitive = true
 }

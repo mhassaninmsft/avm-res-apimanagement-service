@@ -121,30 +121,6 @@ Type: `bool`
 
 Default: `false`
 
-### <a name="input_customer_managed_key"></a> [customer\_managed\_key](#input\_customer\_managed\_key)
-
-Description: A map describing customer-managed keys to associate with the resource. This includes the following properties:
-- `key_vault_resource_id` - The resource ID of the Key Vault where the key is stored.
-- `key_name` - The name of the key.
-- `key_version` - (Optional) The version of the key. If not specified, the latest version is used.
-- `user_assigned_identity` - (Optional) An object representing a user-assigned identity with the following properties:
-  - `resource_id` - The resource ID of the user-assigned identity.
-
-Type:
-
-```hcl
-object({
-    key_vault_resource_id = string
-    key_name              = string
-    key_version           = optional(string, null)
-    user_assigned_identity = optional(object({
-      resource_id = string
-    }), null)
-  })
-```
-
-Default: `null`
-
 ### <a name="input_delegation"></a> [delegation](#input\_delegation)
 
 Description: Delegation settings for the API Management service.
@@ -580,6 +556,10 @@ Default: `null`
 
 The following outputs are exported:
 
+### <a name="output_additional_locations"></a> [additional\_locations](#output\_additional\_locations)
+
+Description: Information about additional locations for the API Management Service.
+
 ### <a name="output_apim_gateway_url"></a> [apim\_gateway\_url](#output\_apim\_gateway\_url)
 
 Description: The gateway URL of the API Management service.
@@ -587,6 +567,22 @@ Description: The gateway URL of the API Management service.
 ### <a name="output_apim_management_url"></a> [apim\_management\_url](#output\_apim\_management\_url)
 
 Description: The management URL of the API Management service.
+
+### <a name="output_certificates"></a> [certificates](#output\_certificates)
+
+Description: Certificate information for the API Management Service.
+
+### <a name="output_developer_portal_url"></a> [developer\_portal\_url](#output\_developer\_portal\_url)
+
+Description: The publisher URL of the API Management service.
+
+### <a name="output_gateway_regional_url"></a> [gateway\_regional\_url](#output\_gateway\_regional\_url)
+
+Description: The Region URL for the Gateway of the API Management Service.
+
+### <a name="output_hostname_configuration"></a> [hostname\_configuration](#output\_hostname\_configuration)
+
+Description: The hostname configuration for the API Management Service.
 
 ### <a name="output_id"></a> [id](#output\_id)
 
@@ -596,13 +592,33 @@ Description: The ID of the API Management service.
 
 Description: The name of the API Management service.
 
-### <a name="output_private_endpoint"></a> [private\_endpoint](#output\_private\_endpoint)
+### <a name="output_portal_url"></a> [portal\_url](#output\_portal\_url)
 
-Description: The private endpoints created for the API Management service.
+Description: The URL for the Publisher Portal associated with this API Management service.
+
+### <a name="output_private_endpoints"></a> [private\_endpoints](#output\_private\_endpoints)
+
+Description: A map of the private endpoints created.
 
 ### <a name="output_private_ip_addresses"></a> [private\_ip\_addresses](#output\_private\_ip\_addresses)
 
 Description: The private IP addresses of the private endpoints created by this module
+
+### <a name="output_public_ip_addresses"></a> [public\_ip\_addresses](#output\_public\_ip\_addresses)
+
+Description: The Public IP addresses of the API Management Service.
+
+### <a name="output_resource"></a> [resource](#output\_resource)
+
+Description: The API Management service resource.
+
+### <a name="output_scm_url"></a> [scm\_url](#output\_scm\_url)
+
+Description: The URL for the SCM (Source Code Management) Endpoint associated with this API Management service.
+
+### <a name="output_tenant_access"></a> [tenant\_access](#output\_tenant\_access)
+
+Description: The tenant access information for the API Management Service.
 
 ### <a name="output_workspace_identity"></a> [workspace\_identity](#output\_workspace\_identity)
 

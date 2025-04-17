@@ -64,16 +64,16 @@ module "virtual_network" {
   name                = module.naming.virtual_network.name_unique
   resource_group_name = azurerm_resource_group.this.name
   location            = azurerm_resource_group.this.location
-  address_space = ["10.0.0.0/16"]
+  address_space       = ["10.0.0.0/16"]
 
   subnets = {
     default_subnet = {
       name             = "default_subnet"
-      address_prefixes  = ["10.0.1.0/24"]
+      address_prefixes = ["10.0.1.0/24"]
       # delegations       = {}
     }
     pe_subnet = {
-      name             = "pe_subnet"
+      name              = "pe_subnet"
       address_prefixes  = ["10.0.2.0/24"]
       service_endpoints = []
       # delegations       = {}
@@ -113,8 +113,8 @@ module "test" {
   source = "../../"
   # source             = "Azure/avm-<res/ptn>-<name>/azurerm"
   # ...
-  location = azurerm_resource_group.this.location
-  name = module.naming.api_management.name_unique # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
+  location            = azurerm_resource_group.this.location
+  name                = module.naming.api_management.name_unique # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
   resource_group_name = azurerm_resource_group.this.name
   publisher_email     = var.publisher_email # see variables.tf
   publisher_name      = "Apim Example Publisher"
@@ -123,7 +123,7 @@ module "test" {
     environment = "test"
     cost_center = "test"
   }
-  enable_telemetry = var.enable_telemetry # see variables.tf
+  enable_telemetry     = var.enable_telemetry # see variables.tf
   virtual_network_type = "None"
 
   # private endpoints

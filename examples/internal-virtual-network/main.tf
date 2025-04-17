@@ -70,8 +70,8 @@ module "test" {
   source = "../../"
   # source             = "Azure/avm-<res/ptn>-<name>/azurerm"
   # ...
-  location            = azurerm_resource_group.this.location
-  name = module.naming.api_management.name_unique # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
+  location = azurerm_resource_group.this.location
+  name     = module.naming.api_management.name_unique # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
   # name                = "TODO" # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
   resource_group_name = azurerm_resource_group.this.name
   publisher_email     = var.publisher_email # see variables.tf
@@ -81,7 +81,7 @@ module "test" {
     environment = "test"
     cost_center = "test"
   }
-  enable_telemetry = var.enable_telemetry # see variables.tf
+  enable_telemetry          = var.enable_telemetry # see variables.tf
   virtual_network_type      = "Internal"
   virtual_network_subnet_id = "/subscriptions/aa27a1b3-530a-4637-a1e6-6855033a65e5/resourceGroups/rg-wwgpr/providers/Microsoft.Network/virtualNetworks/vnetwwgpr/subnets/apim-subnet-4"
 }
