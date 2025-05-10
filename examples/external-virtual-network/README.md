@@ -13,7 +13,7 @@ terraform {
     }
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "4.21.9"
+      version = "~> 4.0"
     }
     modtm = {
       source  = "Azure/modtm"
@@ -27,6 +27,7 @@ terraform {
 }
 
 provider "azurerm" {
+
   features {
     key_vault {
       purge_soft_delete_on_destroy = false
@@ -36,15 +37,16 @@ provider "azurerm" {
     }
     #     api_management {
     # purge_soft_delete_on_destroy = false
-    #     min_api_version = "2024-10-01-preview"
     #     }
   }
 }
 
+
+## Section to provide a random Azure region for the resource group
 # This allows us to randomize the region for the resource group.
 module "regions" {
-  source  = "Azure/avm-utl-regions/azurerm"
-  version = "0.3.0"
+  source  = "Azure/regions/azurerm"
+  version = "~> 0.3"
 }
 
 # This allows us to randomize the region for the resource group.
@@ -52,77 +54,41 @@ resource "random_integer" "region_index" {
   max = length(module.regions.regions) - 1
   min = 0
 }
+## End of section to provide a random Azure region for the resource group
 
 # This ensures we have unique CAF compliant names for our resources.
 module "naming" {
   source  = "Azure/naming/azurerm"
-  version = "0.3.0"
+  version = "~> 0.3"
 }
 
+# This is required for resource modules
 resource "azurerm_resource_group" "this" {
-  name     = module.naming.resource_group.name_unique
   location = module.regions.regions[random_integer.region_index.result].name
-}
-
-resource "azurerm_virtual_network" "this" {
-  name                = module.naming.virtual_network.name_unique
-  address_space       = ["10.0.0.0/16"]
-  location            = azurerm_resource_group.this.location
-  resource_group_name = azurerm_resource_group.this.name
-}
-
-resource "azurerm_subnet" "this" {
-  name                 = module.naming.subnet.name_unique
-  resource_group_name  = azurerm_resource_group.this.name
-  virtual_network_name = azurerm_virtual_network.this.name
-  address_prefixes     = ["10.0.1.0/24"]
-}
-
-resource "azurerm_network_security_group" "this" {
-  name                = module.naming.network_security_group.name_unique
-  location            = azurerm_resource_group.this.location
-  resource_group_name = azurerm_resource_group.this.name
-
-  security_rule {
-    name                       = "allow_https"
-    priority                   = 100
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_port_range     = "443"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
-  }
-}
-
-resource "azurerm_subnet_network_security_group_association" "test_nsg" {
-  subnet_id                 = azurerm_subnet.this.id
-  network_security_group_id = azurerm_network_security_group.this.id
+  name     = module.naming.resource_group.name_unique
 }
 
 # This is the module call
 # Do not specify location here due to the randomization above.
 # Leaving location as `null` will cause the module to use the resource group location
 # with a data source.
-module "this" {
+module "test" {
   source = "../../"
   # source             = "Azure/avm-<res/ptn>-<name>/azurerm"
   # ...
-  location                      = azurerm_resource_group.this.location
-  name                          = module.naming.api_management.name_unique
-  resource_group_name           = azurerm_resource_group.this.name
-  publisher_email               = var.publisher_email
-  publisher_name                = var.publisher_name
-  sku_name                      = var.sku
-  tags                          = var.tags
-  enable_telemetry              = var.enable_telemetry
-  public_network_access_enabled = true
-  public_ip_address_id          = azurerm_public_ip.this.id
-  virtual_network_type          = "External"
-  virtual_network_configuration = {
-    subnet_id = var.subnet_id
+  location            = azurerm_resource_group.this.location
+  name                = module.naming.api_management.name_unique
+  resource_group_name = azurerm_resource_group.this.name
+  publisher_email     = var.publisher_email
+  publisher_name      = "Apim Example Publisher"
+  sku_name            = "Developer_1"
+  tags = {
+    environment = "test"
+    cost_center = "test"
   }
+  enable_telemetry          = var.enable_telemetry # see variables.tf
+  virtual_network_type      = "External"
+  virtual_network_subnet_id = "/subscriptions/aa27a1b3-530a-4637-a1e6-6855033a65e5/resourceGroups/rg-wwgpr/providers/Microsoft.Network/virtualNetworks/vnetwwgpr/subnets/apim-subnet-3"
 }
 ```
 
@@ -135,7 +101,7 @@ The following requirements are needed by this module:
 
 - <a name="requirement_azapi"></a> [azapi](#requirement\_azapi) (~> 2.0)
 
-- <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (4.21.9)
+- <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (~> 4.0)
 
 - <a name="requirement_modtm"></a> [modtm](#requirement\_modtm) (0.3.2)
 
@@ -145,11 +111,7 @@ The following requirements are needed by this module:
 
 The following resources are used by this module:
 
-- [azurerm_network_security_group.this](https://registry.terraform.io/providers/hashicorp/azurerm/4.21.9/docs/resources/network_security_group) (resource)
-- [azurerm_resource_group.this](https://registry.terraform.io/providers/hashicorp/azurerm/4.21.9/docs/resources/resource_group) (resource)
-- [azurerm_subnet.this](https://registry.terraform.io/providers/hashicorp/azurerm/4.21.9/docs/resources/subnet) (resource)
-- [azurerm_subnet_network_security_group_association.test_nsg](https://registry.terraform.io/providers/hashicorp/azurerm/4.21.9/docs/resources/subnet_network_security_group_association) (resource)
-- [azurerm_virtual_network.this](https://registry.terraform.io/providers/hashicorp/azurerm/4.21.9/docs/resources/virtual_network) (resource)
+- [azurerm_resource_group.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) (resource)
 - [random_integer.region_index](https://registry.terraform.io/providers/hashicorp/random/3.6.2/docs/resources/integer) (resource)
 
 <!-- markdownlint-disable MD013 -->
@@ -159,15 +121,7 @@ The following input variables are required:
 
 ### <a name="input_publisher_email"></a> [publisher\_email](#input\_publisher\_email)
 
-Description:   This variable is the publicly face email for the publisher of the APIs made  
-  available in APIM.
-
-Type: `string`
-
-### <a name="input_publisher_name"></a> [publisher\_name](#input\_publisher\_name)
-
-Description:   This variable is the publicly facing name for the publisher of the APIs made  
-  available in APIM.
+Description: The email address of the publisher.
 
 Type: `string`
 
@@ -185,24 +139,6 @@ Type: `bool`
 
 Default: `true`
 
-### <a name="input_sku"></a> [sku](#input\_sku)
-
-Description:   This variable is the SKU used for the APIM deployment. The default is Developer\_1.  
-  The sku\_name is a combination of type (Consumer, Developer, etc) and capacity (number  
-  of deployed units).
-
-Type: `string`
-
-Default: `"Developer_1"`
-
-### <a name="input_tags"></a> [tags](#input\_tags)
-
-Description:   A map of tags to assign to the resource.
-
-Type: `map(string)`
-
-Default: `{}`
-
 ## Outputs
 
 No outputs.
@@ -215,15 +151,15 @@ The following Modules are called:
 
 Source: Azure/naming/azurerm
 
-Version: 0.3.0
+Version: ~> 0.3
 
 ### <a name="module_regions"></a> [regions](#module\_regions)
 
-Source: Azure/avm-utl-regions/azurerm
+Source: Azure/regions/azurerm
 
-Version: 0.3.0
+Version: ~> 0.3
 
-### <a name="module_this"></a> [this](#module\_this)
+### <a name="module_test"></a> [test](#module\_test)
 
 Source: ../../
 

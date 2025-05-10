@@ -13,7 +13,7 @@ terraform {
     }
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "4.21.9"
+      version = "~> 4.0"
     }
     modtm = {
       source  = "Azure/modtm"
@@ -64,28 +64,81 @@ resource "azurerm_resource_group" "this" {
   location = module.regions.regions[random_integer.region_index.result].name
 }
 
+
+
+# Create Virtual Network and Subnets
+resource "azurerm_virtual_network" "this" {
+  name                = module.naming.virtual_network.name_unique
+  address_space       = ["10.0.0.0/16"]
+  location            = azurerm_resource_group.this.location
+  resource_group_name = azurerm_resource_group.this.name
+
+  tags = {
+    environment = "test"
+    cost_center = "test"
+  }
+}
+
+resource "azurerm_subnet" "private_endpoints" {
+  name                 = "private_endpoints"
+  resource_group_name  = azurerm_resource_group.this.name
+  virtual_network_name = azurerm_virtual_network.this.name
+  address_prefixes     = ["10.0.1.0/24"]
+  # private_endpoint_network_policies = "Enabled"
+}
+
+resource "azurerm_subnet" "apim_subnet" {
+  name                 = "apim_subnet"
+  resource_group_name  = azurerm_resource_group.this.name
+  virtual_network_name = azurerm_virtual_network.this.name
+  address_prefixes     = ["10.0.2.0/24"]
+}
+
+resource "azurerm_subnet" "default" {
+  name                 = "default"
+  resource_group_name  = azurerm_resource_group.this.name
+  virtual_network_name = azurerm_virtual_network.this.name
+  address_prefixes     = ["10.0.3.0/24"]
+}
+
+# Private DNS Zone for API Management
+module "private_dns_apim" {
+  source              = "Azure/avm-res-network-privatednszone/azurerm"
+  version             = "~> 0.2"
+  domain_name         = "privatelink.azure-api.net"
+  resource_group_name = azurerm_resource_group.this.name
+  virtual_network_links = {
+    dnslink = {
+      vnetlinkname = "privatelink-azure-api-net"
+      vnetid       = azurerm_virtual_network.this.id
+    }
+  }
+  enable_telemetry = var.enable_telemetry
+}
+
 # This is the module call
 # Do not specify location here due to the randomization above.
 # Leaving location as `null` will cause the module to use the resource group location
 # with a data source.
-module "this" {
+module "test" {
   source = "../../"
-  # source             = "Azure/avm-<res/ptn>-<name>/azurerm"
-  # ...
-  location                      = azurerm_resource_group.this.location
-  name                          = module.naming.api_management.name_unique
-  resource_group_name           = azurerm_resource_group.this.name
-  publisher_email               = var.publisher_email
-  publisher_name                = var.publisher_name
-  sku_name                      = var.sku
-  tags                          = var.tags
-  enable_telemetry              = var.enable_telemetry
-  public_network_access_enabled = var.virtual_network_type == "Internal" ? false : true
-  public_ip_address_id          = var.virtual_network_type == "Internal" ? "" : var.public_ip_address_id
-  virtual_network_type          = var.virtual_network_type
-  virtual_network_configuration = var.virtual_network_type == "None" ? {} : {
-    subnet_id = var.subnet_id
+  # Remove the hardcoded location and use the resource group location
+  location            = azurerm_resource_group.this.location
+  name                = module.naming.api_management.name_unique
+  resource_group_name = azurerm_resource_group.this.name
+  publisher_email     = var.publisher_email # see variables.tf
+  publisher_name      = "Apim Example Publisher"
+  sku_name            = "Developer_1"
+  tags = {
+    environment = "test"
+    cost_center = "test"
   }
+  enable_telemetry = var.enable_telemetry
+
+  # Use the newly created subnet for API Management
+  virtual_network_type      = "External"
+  virtual_network_subnet_id = azurerm_subnet.apim_subnet.id
+
 }
 ```
 
@@ -98,7 +151,7 @@ The following requirements are needed by this module:
 
 - <a name="requirement_azapi"></a> [azapi](#requirement\_azapi) (~> 2.0)
 
-- <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (4.21.9)
+- <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (~> 4.0)
 
 - <a name="requirement_modtm"></a> [modtm](#requirement\_modtm) (0.3.2)
 
@@ -108,7 +161,32 @@ The following requirements are needed by this module:
 
 The following resources are used by this module:
 
-- [azurerm_resource_group.this](https://registry.terraform.io/providers/hashicorp/azurerm/4.21.9/docs/resources/resource_group) (resource)
+- [azurerm_network_security_group.apim_nsg](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/network_security_group) (resource)
+- [azurerm_network_security_rule.inbound_apimgmt_management](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/network_security_rule) (resource)
+- [azurerm_network_security_rule.inbound_azure_lb](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/network_security_rule) (resource)
+- [azurerm_network_security_rule.inbound_azure_lb_monitoring](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/network_security_rule) (resource)
+- [azurerm_network_security_rule.inbound_azure_tm](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/network_security_rule) (resource)
+- [azurerm_network_security_rule.inbound_internet_http_https](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/network_security_rule) (resource)
+- [azurerm_network_security_rule.inbound_redis_external](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/network_security_rule) (resource)
+- [azurerm_network_security_rule.inbound_redis_internal](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/network_security_rule) (resource)
+- [azurerm_network_security_rule.inbound_sync_counters](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/network_security_rule) (resource)
+- [azurerm_network_security_rule.outbound_aad](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/network_security_rule) (resource)
+- [azurerm_network_security_rule.outbound_azure_connectors](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/network_security_rule) (resource)
+- [azurerm_network_security_rule.outbound_azure_monitor](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/network_security_rule) (resource)
+- [azurerm_network_security_rule.outbound_event_hub](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/network_security_rule) (resource)
+- [azurerm_network_security_rule.outbound_file_storage](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/network_security_rule) (resource)
+- [azurerm_network_security_rule.outbound_key_vault](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/network_security_rule) (resource)
+- [azurerm_network_security_rule.outbound_redis_external](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/network_security_rule) (resource)
+- [azurerm_network_security_rule.outbound_redis_internal](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/network_security_rule) (resource)
+- [azurerm_network_security_rule.outbound_sql](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/network_security_rule) (resource)
+- [azurerm_network_security_rule.outbound_storage](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/network_security_rule) (resource)
+- [azurerm_network_security_rule.outbound_sync_counters](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/network_security_rule) (resource)
+- [azurerm_resource_group.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) (resource)
+- [azurerm_subnet.apim_subnet](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/subnet) (resource)
+- [azurerm_subnet.default](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/subnet) (resource)
+- [azurerm_subnet.private_endpoints](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/subnet) (resource)
+- [azurerm_subnet_network_security_group_association.apim](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/subnet_network_security_group_association) (resource)
+- [azurerm_virtual_network.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/virtual_network) (resource)
 - [random_integer.region_index](https://registry.terraform.io/providers/hashicorp/random/3.6.2/docs/resources/integer) (resource)
 
 <!-- markdownlint-disable MD013 -->
@@ -118,15 +196,7 @@ The following input variables are required:
 
 ### <a name="input_publisher_email"></a> [publisher\_email](#input\_publisher\_email)
 
-Description:   This variable is the publicly face email for the publisher of the APIs made  
-  available in APIM.
-
-Type: `string`
-
-### <a name="input_publisher_name"></a> [publisher\_name](#input\_publisher\_name)
-
-Description:   This variable is the publicly facing name for the publisher of the APIs made  
-  available in APIM.
+Description: The email address of the publisher.
 
 Type: `string`
 
@@ -144,53 +214,6 @@ Type: `bool`
 
 Default: `true`
 
-### <a name="input_public_ip_address_id"></a> [public\_ip\_address\_id](#input\_public\_ip\_address\_id)
-
-Description:   This variable is the Azure resource ID for the public IP address of the APIM deployment.  
-  If this field is left blank and an IP address is required, it will be generated automatically.
-
-Type: `string`
-
-Default: `""`
-
-### <a name="input_sku"></a> [sku](#input\_sku)
-
-Description:   This variable is the SKU used for the APIM deployment. The default is Developer\_1.  
-  The sku\_name is a combination of type (Consumer, Developer, etc) and capacity (number  
-  of deployed units).
-
-Type: `string`
-
-Default: `"Developer_1"`
-
-### <a name="input_subnet_id"></a> [subnet\_id](#input\_subnet\_id)
-
-Description: This variable is a subnet ID (Azure resource ID) for the APIM resource. This subnet  
-must have port 3443 open, as well as other port configuration defined here:  
-https://learn.microsoft.com/en-us/azure/api-management/virtual-network-reference?tabs=stv2.  
-Ensure 'Delegate subnet to a service' is set to None for the provided subnet.
-
-Type: `string`
-
-Default: `""`
-
-### <a name="input_tags"></a> [tags](#input\_tags)
-
-Description:   A map of tags to assign to the resource.
-
-Type: `map(string)`
-
-Default: `{}`
-
-### <a name="input_virtual_network_type"></a> [virtual\_network\_type](#input\_virtual\_network\_type)
-
-Description:   This variable controls whether to use an internal, external, or no virtual network.  
-  when deploying APIM. Supported values are 'Internal', 'External', or 'None'.
-
-Type: `string`
-
-Default: `"None"`
-
 ## Outputs
 
 No outputs.
@@ -205,13 +228,19 @@ Source: Azure/naming/azurerm
 
 Version: 0.3.0
 
+### <a name="module_private_dns_apim"></a> [private\_dns\_apim](#module\_private\_dns\_apim)
+
+Source: Azure/avm-res-network-privatednszone/azurerm
+
+Version: ~> 0.2
+
 ### <a name="module_regions"></a> [regions](#module\_regions)
 
 Source: Azure/avm-utl-regions/azurerm
 
 Version: 0.3.0
 
-### <a name="module_this"></a> [this](#module\_this)
+### <a name="module_test"></a> [test](#module\_test)
 
 Source: ../../
 

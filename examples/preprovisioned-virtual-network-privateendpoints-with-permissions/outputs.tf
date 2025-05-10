@@ -51,5 +51,5 @@ output "private_endpoint_name" {
 output "private_endpoint" {
   description = "The private endpoint created for the API Management service."
   value       = module.test.private_endpoint
-  
+
 }

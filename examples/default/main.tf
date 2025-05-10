@@ -20,9 +20,19 @@ terraform {
   }
 }
 
-
 provider "azurerm" {
-  features {}
+
+  features {
+    key_vault {
+      purge_soft_delete_on_destroy = false
+    }
+    resource_group {
+      prevent_deletion_if_contains_resources = false
+    }
+    #     api_management {
+    # purge_soft_delete_on_destroy = false
+    #     }
+  }
 }
 
 
@@ -61,8 +71,14 @@ module "test" {
   # source             = "Azure/avm-<res/ptn>-<name>/azurerm"
   # ...
   location            = azurerm_resource_group.this.location
-  name                = "TODO" # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
+  name                = module.naming.api_management.name_unique
   resource_group_name = azurerm_resource_group.this.name
-
+  publisher_email     = var.publisher_email # see variables.tf
+  publisher_name      = "Apim Example Publisher"
+  sku_name            = "Premium_1"
+  tags = {
+    environment = "test"
+    cost_center = "test"
+  }
   enable_telemetry = var.enable_telemetry # see variables.tf
 }
